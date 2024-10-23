@@ -149,8 +149,8 @@ namespace Thirdweb.Unity
                 throw new ArgumentNullException(nameof(rawMessage), "Message to sign cannot be null.");
             }
 
-            var message = Encoding.UTF8.GetString(rawMessage);
-            return PersonalSign(message);
+            var hex = Utils.BytesToHex(rawMessage);
+            return PersonalSign(hex);
         }
 
         public async Task<string> PersonalSign(string message)
@@ -160,7 +160,7 @@ namespace Thirdweb.Unity
                 throw new ArgumentNullException(nameof(message), "Message to sign cannot be null.");
             }
 
-            var task = _walletConnectService.PersonalSignAsync(message);
+            var task = _walletConnectService.PersonalSignAsync(message.StartsWith("0x") ? message : message.StringToHex());
             SessionRequestDeeplink();
             return await task as string;
         }
