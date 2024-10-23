@@ -279,6 +279,10 @@ namespace Thirdweb.Unity
 
                 // Open modal
                 WalletConnectModal.Open(new WalletConnectModalOptions { ConnectOptions = connectOptions, IncludedWalletIds = _includedWalletIds });
+                WalletConnectModal.ModalClosed += (sender, e) =>
+                {
+                    _exception = new Exception("WalletConnect modal was closed.");
+                };
             }
             catch (Exception e)
             {
