@@ -33,7 +33,7 @@ Experience our multichain game demo leveraging In-App Wallets and Account Abstra
 **Notes:**
 
 - Tested on Unity 2021.3+, 2022.3+, Unity 6 Preview. We recommend using 2022 LTS.
-- Newtonsoft DLL included; deselect if already installed to avoid conflicts.
+- Newtonsoft and EDM4U are included utilities; deselect if already installed to avoid conflicts.
 - If using .NET Framework and encountering `HttpUtility` errors, create `csc.rsp` with `-r:System.Web.dll` under `Assets`.
 - Use version control and test removing duplicate DLLs if conflicts arise.
 
