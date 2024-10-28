@@ -51,7 +51,7 @@ Experience our multichain game demo leveraging In-App Wallets and Account Abstra
 - **Compression Format:** Set to `Disabled` (`Player Settings` > `Publishing Settings`) for final builds.
 - **Testing WebGL Social Login Locally:** Host the build or run it locally with `Cross-Origin-Opener-Policy` set to `same-origin-allow-popups`.
 
-Example setup for testing In-App Wallet (Social Login) locally:
+Example setup for testing In-App or Ecosystem Wallet Social Login locally (no longer required with Unity 6 Web, can use Build & Run):
 
 ```javascript
 // YourWebGLOutputFolder/server.js
