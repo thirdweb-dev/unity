@@ -203,7 +203,7 @@ namespace Thirdweb.Editor
                 "Open Documentation",
                 () =>
                 {
-                    Application.OpenURL("http://portal.thirdweb.com/unity/v5/thirdwebmanager");
+                    Application.OpenURL("http://portal.thirdweb.com/unity/v5");
                 }
             );
         }
