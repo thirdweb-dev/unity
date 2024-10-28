@@ -80,3 +80,6 @@ Assets/Tests/Resources/config.json.meta
 # Ignore temporaries from GameCI
 /[Aa]rtifacts/
 /[Cc]odeCoverage/
+
+# Ignore temporaries from Unity 6
+.utmp/
