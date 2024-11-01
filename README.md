@@ -44,6 +44,7 @@ Experience our multichain game demo leveraging In-App Wallets and Account Abstra
 - **Build Settings:** Use `Smaller (faster) Builds` / `Shorter Build Time`.
 - **Player Settings:** Use IL2CPP over Mono when available.
 - **Stripping Level:** Set `Managed Stripping Level` to `Minimal` (`Player Settings` > `Other Settings` > `Optimization`). (Generally not a hard requirement unless using WalletConnect as a wallet provider option.)
+- **Strip Engine Code:** Make sure this is turned off.
 
 ## WebGL
 
