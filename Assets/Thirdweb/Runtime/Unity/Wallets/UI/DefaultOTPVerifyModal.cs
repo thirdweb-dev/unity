@@ -39,16 +39,11 @@ namespace Thirdweb.Unity
 
                     OTPInputField.interactable = false;
                     SubmitButton.interactable = false;
-                    (var address, var canRetry) = await wallet.LoginWithOtp(otp);
+                    var address = await wallet.LoginWithOtp(otp);
                     if (address != null)
                     {
                         InAppWalletCanvas.gameObject.SetActive(false);
                         tcs.SetResult(wallet);
-                    }
-                    else if (!canRetry)
-                    {
-                        InAppWalletCanvas.gameObject.SetActive(false);
-                        tcs.SetException(new UnityException("Failed to verify OTP."));
                     }
                     else
                     {
