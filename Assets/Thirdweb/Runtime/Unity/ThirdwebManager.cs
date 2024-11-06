@@ -23,7 +23,7 @@ namespace Thirdweb.Unity
         public string PhoneNumber;
         public AuthProvider AuthProvider;
         public string JwtOrPayload;
-        public string EncryptionKey;
+        public string LegacyEncryptionKey;
         public string StorageDirectoryPath;
         public IThirdwebWallet SiweSigner;
 
@@ -32,7 +32,7 @@ namespace Thirdweb.Unity
             string phoneNumber = null,
             AuthProvider authprovider = AuthProvider.Default,
             string jwtOrPayload = null,
-            string encryptionKey = null,
+            string legacyEncryptionKey = null,
             string storageDirectoryPath = null,
             IThirdwebWallet siweSigner = null
         )
@@ -41,7 +41,7 @@ namespace Thirdweb.Unity
             PhoneNumber = phoneNumber;
             AuthProvider = authprovider;
             JwtOrPayload = jwtOrPayload;
-            EncryptionKey = encryptionKey;
+            LegacyEncryptionKey = legacyEncryptionKey;
             StorageDirectoryPath = storageDirectoryPath ?? Path.Combine(Application.persistentDataPath, "Thirdweb", "InAppWallet");
             SiweSigner = siweSigner;
         }
@@ -57,6 +57,7 @@ namespace Thirdweb.Unity
         public string JwtOrPayload;
         public string StorageDirectoryPath;
         public IThirdwebWallet SiweSigner;
+        public string LegacyEncryptionKey;
 
         public EcosystemWalletOptions(
             string ecosystemId = null,
@@ -66,7 +67,8 @@ namespace Thirdweb.Unity
             AuthProvider authprovider = AuthProvider.Default,
             string jwtOrPayload = null,
             string storageDirectoryPath = null,
-            IThirdwebWallet siweSigner = null
+            IThirdwebWallet siweSigner = null,
+            string legacyEncryptionKey = null
         )
         {
             EcosystemId = ecosystemId;
@@ -77,6 +79,7 @@ namespace Thirdweb.Unity
             JwtOrPayload = jwtOrPayload;
             StorageDirectoryPath = storageDirectoryPath ?? Path.Combine(Application.persistentDataPath, "Thirdweb", "EcosystemWallet");
             SiweSigner = siweSigner;
+            LegacyEncryptionKey = legacyEncryptionKey;
         }
     }
 
@@ -164,7 +167,7 @@ namespace Thirdweb.Unity
 
         public static ThirdwebManager Instance { get; private set; }
 
-        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.7.0";
+        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.8.0";
 
         private bool _initialized;
 
@@ -299,7 +302,8 @@ namespace Thirdweb.Unity
                         phoneNumber: walletOptions.InAppWalletOptions.PhoneNumber,
                         authProvider: walletOptions.InAppWalletOptions.AuthProvider,
                         storageDirectoryPath: walletOptions.InAppWalletOptions.StorageDirectoryPath,
-                        siweSigner: walletOptions.InAppWalletOptions.SiweSigner
+                        siweSigner: walletOptions.InAppWalletOptions.SiweSigner,
+                        legacyEncryptionKey: walletOptions.InAppWalletOptions.LegacyEncryptionKey
                     );
                     break;
                 case WalletProvider.EcosystemWallet:
@@ -319,7 +323,8 @@ namespace Thirdweb.Unity
                         phoneNumber: walletOptions.EcosystemWalletOptions.PhoneNumber,
                         authProvider: walletOptions.EcosystemWalletOptions.AuthProvider,
                         storageDirectoryPath: walletOptions.EcosystemWalletOptions.StorageDirectoryPath,
-                        siweSigner: walletOptions.EcosystemWalletOptions.SiweSigner
+                        siweSigner: walletOptions.EcosystemWalletOptions.SiweSigner,
+                        legacyEncryptionKey: walletOptions.EcosystemWalletOptions.LegacyEncryptionKey
                     );
                     break;
                 case WalletProvider.WalletConnectWallet:
@@ -348,11 +353,11 @@ namespace Thirdweb.Unity
                 }
                 else if (walletOptions.InAppWalletOptions.AuthProvider == AuthProvider.JWT)
                 {
-                    _ = await inAppWallet.LoginWithJWT(walletOptions.InAppWalletOptions.JwtOrPayload, walletOptions.InAppWalletOptions.EncryptionKey);
+                    _ = await inAppWallet.LoginWithJWT(walletOptions.InAppWalletOptions.JwtOrPayload);
                 }
                 else if (walletOptions.InAppWalletOptions.AuthProvider == AuthProvider.AuthEndpoint)
                 {
-                    _ = await inAppWallet.LoginWithAuthEndpoint(walletOptions.InAppWalletOptions.JwtOrPayload, walletOptions.InAppWalletOptions.EncryptionKey);
+                    _ = await inAppWallet.LoginWithAuthEndpoint(walletOptions.InAppWalletOptions.JwtOrPayload);
                 }
                 else if (walletOptions.InAppWalletOptions.AuthProvider == AuthProvider.Guest)
                 {

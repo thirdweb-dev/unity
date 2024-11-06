@@ -17,7 +17,6 @@ namespace Thirdweb.Unity
             {
                 throw new Exception("No OTPVerifyModal found in the scene.");
             }
-
             return modal.LoginWithOtp(wallet);
         }
     }
