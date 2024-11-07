@@ -3,31 +3,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Thirdweb.Unity 
+namespace Thirdweb.Unity
 {
-    public class DefaultOTPVerifyModal : AbstractOTPVerifyModal 
+    public class DefaultOTPVerifyModal : AbstractOTPVerifyModal
     {
         [field: SerializeField, Header("UI Settings")]
-        private Canvas InAppWalletCanvas { get; set; }
+        private Canvas OTPCanvas { get; set; }
 
         [field: SerializeField]
         private TMP_InputField OTPInputField { get; set; }
 
         [field: SerializeField]
-        private Button SubmitButton { get; set; }
+        private Button OTPSubmitButton { get; set; }
 
-        public override Task<InAppWallet> LoginWithOtp(InAppWallet wallet)
+        public override Task<IThirdwebWallet> LoginWithOtp(IThirdwebWallet wallet)
         {
-            SubmitButton.onClick.RemoveAllListeners();
+            OTPSubmitButton.onClick.RemoveAllListeners();
             OTPInputField.text = string.Empty;
-            InAppWalletCanvas.gameObject.SetActive(true);
+            OTPCanvas.gameObject.SetActive(true);
 
             OTPInputField.interactable = true;
-            SubmitButton.interactable = true;
+            OTPSubmitButton.interactable = true;
 
-            var tcs = new TaskCompletionSource<InAppWallet>();
+            var tcs = new TaskCompletionSource<IThirdwebWallet>();
 
-            SubmitButton.onClick.AddListener(async () =>
+            OTPSubmitButton.onClick.AddListener(async () =>
             {
                 try
                 {
@@ -38,23 +38,23 @@ namespace Thirdweb.Unity
                     }
 
                     OTPInputField.interactable = false;
-                    SubmitButton.interactable = false;
-                    var address = await wallet.LoginWithOtp(otp);
+                    OTPSubmitButton.interactable = false;
+                    var address = await (wallet as EcosystemWallet).LoginWithOtp(otp);
                     if (address != null)
                     {
-                        InAppWalletCanvas.gameObject.SetActive(false);
+                        OTPCanvas.gameObject.SetActive(false);
                         tcs.SetResult(wallet);
                     }
                     else
                     {
                         OTPInputField.text = string.Empty;
                         OTPInputField.interactable = true;
-                        SubmitButton.interactable = true;
+                        OTPSubmitButton.interactable = true;
                     }
                 }
                 catch (System.Exception e)
                 {
-                    InAppWalletCanvas.gameObject.SetActive(false);
+                    OTPCanvas.gameObject.SetActive(false);
                     tcs.SetException(e);
                 }
             });

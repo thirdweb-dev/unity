@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Thirdweb.Unity 
+namespace Thirdweb.Unity
 {
-    public abstract class AbstractOTPVerifyModal : MonoBehaviour 
+    public abstract class AbstractOTPVerifyModal : MonoBehaviour
     {
-        public abstract Task<InAppWallet> LoginWithOtp(InAppWallet wallet);
+        public abstract Task<IThirdwebWallet> LoginWithOtp(IThirdwebWallet wallet);
     }
 }

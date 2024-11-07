@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 3138449904238523824}
   - component: {fileID: 8003006277427483696}
   m_Layer: 0
-  m_Name: EcosystemWalletCanvas
+  m_Name: OTPCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -683,9 +683,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 927399162371239047}
-  - component: {fileID: 1971647906293956350}
+  - component: {fileID: 6095702023232371779}
   m_Layer: 0
-  m_Name: EcosystemWalletModal
+  m_Name: DefaultOTPModal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -707,7 +707,7 @@ Transform:
   - {fileID: 6039721690277681462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1971647906293956350
+--- !u!114 &6095702023232371779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -716,12 +716,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5852007486238492023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 098b77f902422574d8dee17fc1e57316, type: 3}
+  m_Script: {fileID: 11500000, guid: a96668f883644d6dbd0c17a62569d70a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EcosystemWalletCanvas>k__BackingField: {fileID: 6544897856717633322}
+  <OTPCanvas>k__BackingField: {fileID: 6544897856717633322}
   <OTPInputField>k__BackingField: {fileID: 3669709369412789774}
-  <SubmitButton>k__BackingField: {fileID: 6735067967567420699}
+  <OTPSubmitButton>k__BackingField: {fileID: 6735067967567420699}
 --- !u!1 &6516515637553372127
 GameObject:
   m_ObjectHideFlags: 0

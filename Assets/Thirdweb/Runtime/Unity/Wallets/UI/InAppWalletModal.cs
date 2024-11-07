@@ -6,7 +6,7 @@ namespace Thirdweb.Unity
 {
     public static class InAppWalletModal
     {
-        public static Task<InAppWallet> LoginWithOtp(InAppWallet wallet)
+        public static async Task<InAppWallet> LoginWithOtp(InAppWallet wallet)
         {
 #if UNITY_6000_0_OR_NEWER
             var modal = Object.FindAnyObjectByType<AbstractOTPVerifyModal>();
@@ -17,7 +17,7 @@ namespace Thirdweb.Unity
             {
                 throw new Exception("No OTPVerifyModal found in the scene.");
             }
-            return modal.LoginWithOtp(wallet);
+            return await modal.LoginWithOtp(wallet) as InAppWallet;
         }
     }
 }
