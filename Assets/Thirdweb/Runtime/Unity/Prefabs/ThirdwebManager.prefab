@@ -31,7 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6757656659025929550}
-  - {fileID: 2068803692016539523}
   - {fileID: 5087052691893732598}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,132 +52,7 @@ MonoBehaviour:
   <ShowDebugLogs>k__BackingField: 1
   <OptOutUsageAnalytics>k__BackingField: 0
   <SupportedChains>k__BackingField: ee6e060000000000
---- !u!1001 &1183062832708090628
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7977017408921700919}
-    m_Modifications:
-    - target: {fileID: 870115345117033871, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 870115345117033871, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 870115345117033871, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 870115345117033871, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890399708717926316, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890399708717926316, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890399708717926316, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890399708717926316, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218515456902683515, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218515456902683515, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218515456902683515, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218515456902683515, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5371112846942902171, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5371112846942902171, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5371112846942902171, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5371112846942902171, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5852007486238492023, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-      propertyPath: m_Name
-      value: InAppWalletModal
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
---- !u!4 &2068803692016539523 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 927399162371239047, guid: 948c3090b3e324d46b37f01e37d30c63, type: 3}
-  m_PrefabInstance: {fileID: 1183062832708090628}
-  m_PrefabAsset: {fileID: 0}
+  <RedirectPageHtmlOverride>k__BackingField: 
 --- !u!1001 &5352000285921552497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,7 +103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5852007486238492023, guid: 18a493914f00ad64ba926678a771613e, type: 3}
       propertyPath: m_Name
-      value: EcosystemWalletModal
+      value: DefaultOTPModal
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
