@@ -13,7 +13,7 @@ namespace Thirdweb.Editor
         private SerializedProperty initializeOnAwakeProp;
         private SerializedProperty showDebugLogsProp;
         private SerializedProperty optOutUsageAnalyticsProp;
-        private SerializedProperty supportedChainsProp;
+        private SerializedProperty appKitConfigProp;
         private SerializedProperty redirectPageHtmlOverrideProp;
 
         private int selectedTab = 0;
@@ -31,7 +31,7 @@ namespace Thirdweb.Editor
             initializeOnAwakeProp = FindProperty("InitializeOnAwake");
             showDebugLogsProp = FindProperty("ShowDebugLogs");
             optOutUsageAnalyticsProp = FindProperty("OptOutUsageAnalytics");
-            supportedChainsProp = FindProperty("SupportedChains");
+            appKitConfigProp = FindProperty("AppKitConfig");
             redirectPageHtmlOverrideProp = FindProperty("RedirectPageHtmlOverride");
 
             bannerImage = Resources.Load<Texture2D>("EditorBanner");
@@ -162,7 +162,7 @@ namespace Thirdweb.Editor
 
             // Wallet Connect Settings
             GUILayout.Label("Wallet Connect Settings", EditorStyles.boldLabel);
-            DrawProperty(supportedChainsProp, "Supported Chains");
+            DrawProperty(appKitConfigProp, "AppKit Config");
 
             GUILayout.Space(10);
 

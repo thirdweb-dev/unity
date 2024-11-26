@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using System.Linq;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Thirdweb.Unity
 {
@@ -137,6 +137,28 @@ namespace Thirdweb.Unity
         }
     }
 
+    [Serializable]
+    public class ThirdwebAppKitConfig
+    {
+        public string ProjectId;
+
+        public readonly string Name;
+        public readonly string Description;
+        public readonly string Url;
+        public readonly string IconUrl;
+
+        public string[] SupportedChainIds;
+
+        public string[] IncludedWalletIds;
+        public string[] ExcludedWalletIds;
+
+        public ushort ConnectViewWalletsCountMobile = 3;
+        public ushort ConnectViewWalletsCountDesktop = 2;
+
+        public string RedirectNative;
+        public string RedirectUniversal;
+    }
+
     [HelpURL("http://portal.thirdweb.com/unity/v5/thirdwebmanager")]
     public class ThirdwebManager : MonoBehaviour
     {
@@ -156,7 +178,7 @@ namespace Thirdweb.Unity
         private bool OptOutUsageAnalytics { get; set; } = false;
 
         [field: SerializeField]
-        private ulong[] SupportedChains { get; set; } = new ulong[] { 421614 };
+        private ThirdwebAppKitConfig AppKitConfig { get; set; }
 
         [field: SerializeField]
         private string RedirectPageHtmlOverride { get; set; } = null;
@@ -328,8 +350,69 @@ namespace Thirdweb.Unity
                     );
                     break;
                 case WalletProvider.WalletConnectWallet:
-                    var supportedChains = SupportedChains.Select(chain => new BigInteger(chain)).ToArray();
-                    wallet = await WalletConnectWallet.Create(client: Client, initialChainId: walletOptions.ChainId, supportedChains: supportedChains);
+                    var supportedChainsWc = new Reown.AppKit.Unity.Chain[]
+                    {
+                        Reown.AppKit.Unity.ChainConstants.Chains.Ethereum,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Arbitrum,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Polygon,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Avalanche,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Optimism,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Base,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Celo,
+                        Reown.AppKit.Unity.ChainConstants.Chains.Ronin
+                    };
+
+                    if (AppKitConfig.SupportedChainIds != null && AppKitConfig.SupportedChainIds.Length > 0)
+                    {
+                        var chainMetaTasks = new List<Task<ThirdwebChainData>>();
+                        foreach (var chainId in AppKitConfig.SupportedChainIds)
+                        {
+                            chainMetaTasks.Add(Utils.GetChainMetadata(Client, BigInteger.Parse(chainId)));
+                        }
+                        var chainMetas = await Task.WhenAll(chainMetaTasks);
+                        supportedChainsWc = chainMetas
+                            .Select(
+                                meta =>
+                                    new Reown.AppKit.Unity.Chain(
+                                        "eip155",
+                                        meta.ChainId.ToString(),
+                                        meta.Name,
+                                        new Reown.AppKit.Unity.Currency(meta.NativeCurrency.Name, meta.NativeCurrency.Symbol, meta.NativeCurrency.Decimals),
+                                        new Reown.AppKit.Unity.BlockExplorer(meta.Explorers?[0].Name, meta.Explorers?[0].Url),
+                                        rpcUrl: $"https://{meta.ChainId}.rpc.thirdweb.com",
+                                        meta.Testnet,
+                                        string.IsNullOrEmpty(meta.Icon?.Url)
+                                            ? Utils.ReplaceIPFS("ipfs://bafkreiawlhc2trzyxgnz24vowdymxme2m446uk4vmrplgxsdd74ecpfloq")
+                                            : Utils.ReplaceIPFS(meta.Icon.Url),
+                                        null
+                                    )
+                            )
+                            .ToArray();
+                    }
+
+                    wallet = await WalletConnectWallet.Create(
+                        client: Client,
+                        initialChainId: walletOptions.ChainId,
+                        config: new Reown.AppKit.Unity.AppKitConfig()
+                        {
+                            projectId = string.IsNullOrEmpty(AppKitConfig.ProjectId) ? "08c4b07e3ad25f1a27c14a4e8cecb6f0" : AppKitConfig.ProjectId,
+                            includedWalletIds = AppKitConfig.IncludedWalletIds == null || AppKitConfig.IncludedWalletIds.Length == 0 ? null : AppKitConfig.IncludedWalletIds,
+                            excludedWalletIds = AppKitConfig.ExcludedWalletIds == null || AppKitConfig.ExcludedWalletIds.Length == 0 ? null : AppKitConfig.ExcludedWalletIds,
+                            connectViewWalletsCountMobile = AppKitConfig.ConnectViewWalletsCountMobile,
+                            connectViewWalletsCountDesktop = AppKitConfig.ConnectViewWalletsCountDesktop,
+                            enableOnramp = false,
+                            enableAnalytics = false,
+                            enableCoinbaseWallet = true,
+                            supportedChains = supportedChainsWc,
+                            metadata = new Reown.AppKit.Unity.Metadata(
+                                string.IsNullOrEmpty(AppKitConfig.Name) ? "thirdweb game" : AppKitConfig.Name,
+                                string.IsNullOrEmpty(AppKitConfig.Description) ? "thirdweb unity sdk demo" : AppKitConfig.Description,
+                                string.IsNullOrEmpty(AppKitConfig.Url) ? "https://thirdweb.com" : AppKitConfig.Url,
+                                string.IsNullOrEmpty(AppKitConfig.IconUrl) ? "https://thirdweb.com/favicon.ico" : AppKitConfig.IconUrl,
+                                new Reown.AppKit.Unity.RedirectData { Native = AppKitConfig.RedirectNative, Universal = AppKitConfig.RedirectUniversal }
+                            ),
+                        }
+                    );
                     break;
                 case WalletProvider.MetaMaskWallet:
                     wallet = await MetaMaskWallet.Create(client: Client, activeChainId: walletOptions.ChainId);
