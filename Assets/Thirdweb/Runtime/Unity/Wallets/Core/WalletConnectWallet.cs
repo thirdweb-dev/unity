@@ -46,7 +46,7 @@ namespace Thirdweb.Unity
                 await AppKit.InitializeAsync(config);
             }
 
-            AppKit.OpenModal();
+            AppKit.OpenModal(ViewType.Connect);
 
             AppKit.AccountConnected += OnConnected;
 

@@ -384,7 +384,7 @@ namespace Thirdweb.Unity
                                         string.IsNullOrEmpty(meta.Icon?.Url)
                                             ? Utils.ReplaceIPFS("ipfs://bafkreiawlhc2trzyxgnz24vowdymxme2m446uk4vmrplgxsdd74ecpfloq")
                                             : Utils.ReplaceIPFS(meta.Icon.Url),
-                                        null
+                                        meta.Slug
                                     )
                             )
                             .ToArray();
