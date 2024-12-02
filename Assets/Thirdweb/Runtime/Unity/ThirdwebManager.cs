@@ -411,6 +411,7 @@ namespace Thirdweb.Unity
                                 string.IsNullOrEmpty(AppKitConfig.IconUrl) ? "https://thirdweb.com/favicon.ico" : AppKitConfig.IconUrl,
                                 new Reown.AppKit.Unity.RedirectData { Native = AppKitConfig.RedirectNative, Universal = AppKitConfig.RedirectUniversal }
                             ),
+                            enableEmail = false,
                         }
                     );
                     break;
