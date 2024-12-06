@@ -17,16 +17,8 @@ namespace Thirdweb.Unity
         EcosystemWallet
     }
 
-    public class InAppWalletOptions
+    public class InAppWalletOptions : EcosystemWalletOptions
     {
-        public string Email;
-        public string PhoneNumber;
-        public AuthProvider AuthProvider;
-        public string JwtOrPayload;
-        public string LegacyEncryptionKey;
-        public string StorageDirectoryPath;
-        public IThirdwebWallet SiweSigner;
-
         public InAppWalletOptions(
             string email = null,
             string phoneNumber = null,
@@ -36,15 +28,15 @@ namespace Thirdweb.Unity
             string storageDirectoryPath = null,
             IThirdwebWallet siweSigner = null
         )
-        {
-            Email = email;
-            PhoneNumber = phoneNumber;
-            AuthProvider = authprovider;
-            JwtOrPayload = jwtOrPayload;
-            LegacyEncryptionKey = legacyEncryptionKey;
-            StorageDirectoryPath = storageDirectoryPath ?? Path.Combine(Application.persistentDataPath, "Thirdweb", "InAppWallet");
-            SiweSigner = siweSigner;
-        }
+            : base(
+                email: email,
+                phoneNumber: phoneNumber,
+                authprovider: authprovider,
+                jwtOrPayload: jwtOrPayload,
+                storageDirectoryPath: storageDirectoryPath,
+                siweSigner: siweSigner,
+                legacyEncryptionKey: legacyEncryptionKey
+            ) { }
     }
 
     public class EcosystemWalletOptions
