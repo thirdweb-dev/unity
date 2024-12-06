@@ -415,10 +415,6 @@ namespace Thirdweb.Unity.Examples
             {
                 try
                 {
-                    if (!await smartWallet.IsDeployed())
-                    {
-                        Log(panel.LogText, "Account not deployed yet, deploying before signing...");
-                    }
                     var message = "Hello, World!";
                     var signature = await smartWallet.PersonalSign(message);
                     Log(panel.LogText, $"Signature: {signature}");
