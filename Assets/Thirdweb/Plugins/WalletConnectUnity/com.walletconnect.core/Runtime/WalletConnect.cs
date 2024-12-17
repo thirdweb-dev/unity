@@ -99,7 +99,8 @@ namespace WalletConnectUnity.Core
                         Storage = storage,
                         RelayUrl = projectConfig.RelayUrl,
                         RelayUrlBuilder = new UnityRelayUrlBuilder(),
-                        ConnectionBuilder = new NativeWebSocketConnectionBuilder()
+                        ConnectionBuilder = new NativeWebSocketConnectionBuilder(),
+                        ConnectionTimeout = TimeSpan.FromSeconds(180)
                     }
                 );
 
