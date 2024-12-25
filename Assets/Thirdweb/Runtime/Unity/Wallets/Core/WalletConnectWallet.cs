@@ -126,7 +126,7 @@ namespace Thirdweb.Unity
             await WalletConnect.Instance.SignClient.AddressProvider.SetDefaultChainIdAsync($"eip155:{chainId}");
         }
 
-        [Obsolete("Use SwitchNetwork instead.")]
+        [Obsolete("Use IThirdwebWallet.SwitchNetwork instead.")]
         public Task EnsureCorrectNetwork(BigInteger chainId)
         {
             return SwitchNetwork(chainId);
@@ -279,6 +279,16 @@ namespace Thirdweb.Unity
         public Task<List<LinkedAccount>> GetLinkedAccounts()
         {
             throw new InvalidOperationException("GetLinkedAccounts is not supported by external wallets.");
+        }
+
+        public Task<List<LinkedAccount>> UnlinkAccount(LinkedAccount accountToUnlink)
+        {
+            throw new InvalidOperationException("UnlinkAccount is not supported by external wallets.");
+        }
+
+        public Task<EIP7702Authorization> SignAuthorization(BigInteger chainId, string contractAddress, bool willSelfExecute)
+        {
+            throw new InvalidOperationException("SignAuthorization is not supported by external wallets.");
         }
 
         #endregion

@@ -32,33 +32,36 @@ namespace Thirdweb.Unity
             }
 
             var metaMaskInstance = WebGLMetaMask.Instance;
+            var mmWallet = new MetaMaskWallet();
 
             if (metaMaskInstance.IsConnected() && !string.IsNullOrEmpty(metaMaskInstance.GetAddress()))
             {
                 ThirdwebDebug.Log("MetaMask already initialized.");
-                await EnsureCorrectNetwork(activeChainId);
-                return new MetaMaskWallet();
-            }
-
-            if (metaMaskInstance.IsMetaMaskAvailable())
-            {
-                ThirdwebDebug.Log("MetaMask is available. Enabling Ethereum...");
-                var isEnabled = await metaMaskInstance.EnableEthereumAsync();
-                ThirdwebDebug.Log($"Ethereum enabled: {isEnabled}");
-                if (isEnabled && !string.IsNullOrEmpty(metaMaskInstance.GetAddress()))
-                {
-                    ThirdwebDebug.Log("MetaMask initialized successfully.");
-                    await EnsureCorrectNetwork(activeChainId);
-                    return new MetaMaskWallet();
-                }
-                else
-                {
-                    throw new Exception("MetaMask initialization failed or address is empty.");
-                }
+                await mmWallet.SwitchNetwork(activeChainId);
+                return mmWallet;
             }
             else
             {
-                throw new Exception("MetaMask is not available.");
+                if (metaMaskInstance.IsMetaMaskAvailable())
+                {
+                    ThirdwebDebug.Log("MetaMask is available. Enabling Ethereum...");
+                    var isEnabled = await metaMaskInstance.EnableEthereumAsync();
+                    ThirdwebDebug.Log($"Ethereum enabled: {isEnabled}");
+                    if (isEnabled && !string.IsNullOrEmpty(metaMaskInstance.GetAddress()))
+                    {
+                        ThirdwebDebug.Log("MetaMask initialized successfully.");
+                        await mmWallet.SwitchNetwork(activeChainId);
+                        return mmWallet;
+                    }
+                    else
+                    {
+                        throw new Exception("MetaMask initialization failed or address is empty.");
+                    }
+                }
+                else
+                {
+                    throw new Exception("MetaMask is not available.");
+                }
             }
         }
 
@@ -214,38 +217,76 @@ namespace Thirdweb.Unity
             throw new InvalidOperationException("GetLinkedAccounts is not supported by external wallets.");
         }
 
+        public Task<List<LinkedAccount>> UnlinkAccount(LinkedAccount accountToUnlink)
+        {
+            throw new InvalidOperationException("UnlinkAccount is not supported by external wallets.");
+        }
+
+        public Task<EIP7702Authorization> SignAuthorization(BigInteger chainId, string contractAddress, bool willSelfExecute)
+        {
+            throw new InvalidOperationException("SignAuthorization is not supported by external wallets.");
+        }
+
+        public async Task SwitchNetwork(BigInteger chainId)
+        {
+            if (WebGLMetaMask.Instance.GetActiveChainId() != chainId)
+            {
+                try
+                {
+                    await SwitchNetworkInternal(chainId);
+                }
+                catch
+                {
+                    await AddNetworkInternal(chainId);
+                    if (WebGLMetaMask.Instance.GetActiveChainId() == chainId)
+                    {
+                        return;
+                    }
+                    try
+                    {
+                        await SwitchNetworkInternal(chainId);
+                    }
+                    catch
+                    {
+                        // no-op, later metamask extension versions do not necessarily require switching post adding
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Network Switching
 
+        [Obsolete("Use IThirdwebWallet.SwitchNetwork instead.")]
         public static async Task EnsureCorrectNetwork(BigInteger chainId)
         {
             if (WebGLMetaMask.Instance.GetActiveChainId() != chainId)
             {
                 try
                 {
-                    await SwitchNetwork(chainId);
+                    await SwitchNetworkInternal(chainId);
                 }
                 catch
                 {
-                    await AddNetwork(chainId);
+                    await AddNetworkInternal(chainId);
                     if (WebGLMetaMask.Instance.GetActiveChainId() == chainId)
                     {
                         return;
                     }
-                    await SwitchNetwork(chainId);
+                    await SwitchNetworkInternal(chainId);
                 }
             }
         }
 
-        private static async Task SwitchNetwork(BigInteger chainId)
+        private static async Task SwitchNetworkInternal(BigInteger chainId)
         {
             var switchEthereumChainParameter = new SwitchEthereumChainParameter { ChainId = new HexBigInteger(chainId) };
             var rpcRequest = new RpcRequest { Method = "wallet_switchEthereumChain", Params = new object[] { switchEthereumChainParameter } };
             _ = await WebGLMetaMask.Instance.RequestAsync<string>(rpcRequest);
         }
 
-        private static async Task AddNetwork(BigInteger chainId)
+        private static async Task AddNetworkInternal(BigInteger chainId)
         {
             ThirdwebDebug.Log($"Fetching chain data for chainId {chainId}...");
             var twChainData = await Utils.GetChainMetadata(_client, chainId) ?? throw new Exception($"Chain data for chainId {chainId} could not be fetched.");
