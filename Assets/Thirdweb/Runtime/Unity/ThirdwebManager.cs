@@ -159,7 +159,7 @@ namespace Thirdweb.Unity
 
         public static ThirdwebManager Instance { get; private set; }
 
-        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.12.2";
+        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.13.0";
 
         private bool _initialized;
 
