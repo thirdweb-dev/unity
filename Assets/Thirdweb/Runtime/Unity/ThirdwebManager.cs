@@ -129,6 +129,13 @@ namespace Thirdweb.Unity
         }
     }
 
+    [Serializable]
+    public struct RpcOverride
+    {
+        public ulong ChainId;
+        public string RpcUrl;
+    }
+
     [HelpURL("http://portal.thirdweb.com/unity/v5/thirdwebmanager")]
     public class ThirdwebManager : MonoBehaviour
     {
@@ -152,6 +159,9 @@ namespace Thirdweb.Unity
 
         [field: SerializeField]
         private string RedirectPageHtmlOverride { get; set; } = null;
+
+        [field: SerializeField]
+        private List<RpcOverride> RpcOverrides { get; set; } = null;
 
         public ThirdwebClient Client { get; private set; }
 
@@ -208,7 +218,8 @@ namespace Thirdweb.Unity
                 sdkName: Application.platform == RuntimePlatform.WebGLPlayer ? "UnitySDK_WebGL" : "UnitySDK",
                 sdkOs: Application.platform.ToString(),
                 sdkPlatform: "unity",
-                sdkVersion: THIRDWEB_UNITY_SDK_VERSION
+                sdkVersion: THIRDWEB_UNITY_SDK_VERSION,
+                rpcOverrides: RpcOverrides == null || RpcOverrides.Count == 0 ? null : RpcOverrides.ToDictionary(rpcOverride => new BigInteger(rpcOverride.ChainId), rpcOverride => rpcOverride.RpcUrl)
             );
 
             ThirdwebDebug.Log("ThirdwebManager initialized.");

@@ -15,6 +15,7 @@ namespace Thirdweb.Editor
         private SerializedProperty optOutUsageAnalyticsProp;
         private SerializedProperty supportedChainsProp;
         private SerializedProperty redirectPageHtmlOverrideProp;
+        private SerializedProperty rpcOverridesProp;
 
         private int selectedTab = 0;
         private readonly string[] tabTitles = { "Client", "Preferences", "Misc", "Debug" };
@@ -33,6 +34,7 @@ namespace Thirdweb.Editor
             optOutUsageAnalyticsProp = FindProperty("OptOutUsageAnalytics");
             supportedChainsProp = FindProperty("SupportedChains");
             redirectPageHtmlOverrideProp = FindProperty("RedirectPageHtmlOverride");
+            rpcOverridesProp = FindProperty("RpcOverrides");
 
             bannerImage = Resources.Load<Texture2D>("EditorBanner");
         }
@@ -161,15 +163,18 @@ namespace Thirdweb.Editor
             EditorGUILayout.HelpBox("Configure other settings here.", MessageType.Info);
 
             // Wallet Connect Settings
-            GUILayout.Label("Wallet Connect Settings", EditorStyles.boldLabel);
-            DrawProperty(supportedChainsProp, "Supported Chains");
+            DrawProperty(supportedChainsProp, "WalletConnect Supported Chains");
 
             GUILayout.Space(10);
 
             // Desktop OAuth Settings
-            GUILayout.Label("Desktop OAuth Settings", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("Redirect Page HTML Override", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("OAuth Redirect Page HTML Override", EditorStyles.boldLabel);
             redirectPageHtmlOverrideProp.stringValue = EditorGUILayout.TextArea(redirectPageHtmlOverrideProp.stringValue, GUILayout.MinHeight(75));
+
+            GUILayout.Space(10);
+
+            // RPC Overrides
+            DrawProperty(rpcOverridesProp, "RPC Overrides");
         }
 
         private void DrawDebugTab()
