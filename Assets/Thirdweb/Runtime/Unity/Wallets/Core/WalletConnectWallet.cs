@@ -35,7 +35,7 @@ namespace Thirdweb.Unity
             _client = client;
         }
 
-        public async static Task<WalletConnectWallet> Create(ThirdwebClient client, BigInteger initialChainId, BigInteger[] supportedChains)
+        public async static Task<WalletConnectWallet> Create(ThirdwebClient client, BigInteger initialChainId, BigInteger[] supportedChains, string[] includedWalletIds)
         {
             var eip155ChainsSupported = new string[] { };
             if (supportedChains != null)
@@ -44,6 +44,7 @@ namespace Thirdweb.Unity
             _exception = null;
             _isConnected = false;
             _supportedChains = eip155ChainsSupported;
+            _includedWalletIds = includedWalletIds;
 
             if (WalletConnect.Instance != null && WalletConnect.Instance.IsConnected)
             {

@@ -52,7 +52,9 @@ MonoBehaviour:
   <ShowDebugLogs>k__BackingField: 1
   <OptOutUsageAnalytics>k__BackingField: 0
   <SupportedChains>k__BackingField: ee6e060000000000
+  <IncludedWalletIds>k__BackingField: []
   <RedirectPageHtmlOverride>k__BackingField: 
+  <RpcOverrides>k__BackingField: []
 --- !u!1001 &5352000285921552497
 PrefabInstance:
   m_ObjectHideFlags: 0

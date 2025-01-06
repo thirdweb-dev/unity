@@ -158,6 +158,9 @@ namespace Thirdweb.Unity
         private ulong[] SupportedChains { get; set; } = new ulong[] { 421614 };
 
         [field: SerializeField]
+        private string[] IncludedWalletIds { get; set; } = null;
+
+        [field: SerializeField]
         private string RedirectPageHtmlOverride { get; set; } = null;
 
         [field: SerializeField]
@@ -332,7 +335,8 @@ namespace Thirdweb.Unity
                     break;
                 case WalletProvider.WalletConnectWallet:
                     var supportedChains = SupportedChains.Select(chain => new BigInteger(chain)).ToArray();
-                    wallet = await WalletConnectWallet.Create(client: Client, initialChainId: walletOptions.ChainId, supportedChains: supportedChains);
+                    var includedWalletIds = IncludedWalletIds == null || IncludedWalletIds.Length == 0 ? null : IncludedWalletIds;
+                    wallet = await WalletConnectWallet.Create(client: Client, initialChainId: walletOptions.ChainId, supportedChains: supportedChains, includedWalletIds: includedWalletIds);
                     break;
                 case WalletProvider.MetaMaskWallet:
                     wallet = await MetaMaskWallet.Create(client: Client, activeChainId: walletOptions.ChainId);
