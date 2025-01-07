@@ -13,6 +13,7 @@ namespace Thirdweb.Editor
         private SerializedProperty initializeOnAwakeProp;
         private SerializedProperty showDebugLogsProp;
         private SerializedProperty optOutUsageAnalyticsProp;
+        private SerializedProperty autoConnectLastWallet;
         private SerializedProperty supportedChainsProp;
         private SerializedProperty includedWalletIdsProp;
         private SerializedProperty redirectPageHtmlOverrideProp;
@@ -33,6 +34,7 @@ namespace Thirdweb.Editor
             initializeOnAwakeProp = FindProperty("InitializeOnAwake");
             showDebugLogsProp = FindProperty("ShowDebugLogs");
             optOutUsageAnalyticsProp = FindProperty("OptOutUsageAnalytics");
+            autoConnectLastWallet = FindProperty("AutoConnectLastWallet");
             supportedChainsProp = FindProperty("SupportedChains");
             includedWalletIdsProp = FindProperty("IncludedWalletIds");
             redirectPageHtmlOverrideProp = FindProperty("RedirectPageHtmlOverride");
@@ -158,6 +160,11 @@ namespace Thirdweb.Editor
             DrawProperty(initializeOnAwakeProp, "Initialize On Awake", "If enabled, Thirdweb will initialize on Awake. If disabled, you must call ThirdwebManager.Instance.Initialize() manually.");
             DrawProperty(showDebugLogsProp, "Show Debug Logs", "If enabled, Thirdweb will log debug messages to the console.");
             DrawProperty(optOutUsageAnalyticsProp, "Opt-Out of Usage Analytics", "If enabled, you may see inconsistent stats in your Thirdweb Dashboard.");
+            DrawProperty(
+                autoConnectLastWallet,
+                "Auto-Connect Last Wallet",
+                "If enabled, Thirdweb will automatically connect to the last connected wallet on initialization (this behavior does not apply to the WalletConnectWallet provider option)."
+            );
         }
 
         private void DrawMiscTab()

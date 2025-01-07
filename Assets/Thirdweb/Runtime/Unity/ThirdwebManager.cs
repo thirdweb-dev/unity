@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Thirdweb.Unity
 {
+    [Serializable]
     public enum WalletProvider
     {
         PrivateKeyWallet,
@@ -17,6 +19,7 @@ namespace Thirdweb.Unity
         EcosystemWallet
     }
 
+    [Serializable]
     public class InAppWalletOptions : EcosystemWalletOptions
     {
         public InAppWalletOptions(
@@ -39,16 +42,34 @@ namespace Thirdweb.Unity
             ) { }
     }
 
+    [Serializable]
     public class EcosystemWalletOptions
     {
+        [JsonProperty("ecosystemId")]
         public string EcosystemId;
+
+        [JsonProperty("ecosystemPartnerId")]
         public string EcosystemPartnerId;
+
+        [JsonProperty("email")]
         public string Email;
+
+        [JsonProperty("phoneNumber")]
         public string PhoneNumber;
+
+        [JsonProperty("authProvider")]
         public AuthProvider AuthProvider;
+
+        [JsonProperty("jwtOrPayload")]
         public string JwtOrPayload;
+
+        [JsonProperty("storageDirectoryPath")]
         public string StorageDirectoryPath;
+
+        [JsonProperty("siweSigner")]
         public IThirdwebWallet SiweSigner;
+
+        [JsonProperty("legacyEncryptionKey")]
         public string LegacyEncryptionKey;
 
         public EcosystemWalletOptions(
@@ -75,14 +96,28 @@ namespace Thirdweb.Unity
         }
     }
 
+    [Serializable]
     public class SmartWalletOptions
     {
+        [JsonProperty("sponsorGas")]
         public bool SponsorGas;
+
+        [JsonProperty("factoryAddress")]
         public string FactoryAddress;
+
+        [JsonProperty("accountAddressOverride")]
         public string AccountAddressOverride;
+
+        [JsonProperty("entryPoint")]
         public string EntryPoint;
+
+        [JsonProperty("bundlerUrl")]
         public string BundlerUrl;
+
+        [JsonProperty("paymasterUrl")]
         public string PaymasterUrl;
+
+        [JsonProperty("tokenPaymaster")]
         public TokenPaymaster TokenPaymaster;
 
         public SmartWalletOptions(
@@ -105,12 +140,22 @@ namespace Thirdweb.Unity
         }
     }
 
+    [Serializable]
     public class WalletOptions
     {
+        [JsonProperty("provider")]
         public WalletProvider Provider;
+
+        [JsonProperty("chainId")]
         public BigInteger ChainId;
+
+        [JsonProperty("inAppWalletOptions")]
         public InAppWalletOptions InAppWalletOptions;
+
+        [JsonProperty("ecosystemWalletOptions", NullValueHandling = NullValueHandling.Ignore)]
         public EcosystemWalletOptions EcosystemWalletOptions;
+
+        [JsonProperty("smartWalletOptions", NullValueHandling = NullValueHandling.Ignore)]
         public SmartWalletOptions SmartWalletOptions;
 
         public WalletOptions(
@@ -155,6 +200,9 @@ namespace Thirdweb.Unity
         private bool OptOutUsageAnalytics { get; set; } = false;
 
         [field: SerializeField]
+        private bool AutoConnectLastWallet { get; set; } = false;
+
+        [field: SerializeField]
         private ulong[] SupportedChains { get; set; } = new ulong[] { 421614 };
 
         [field: SerializeField]
@@ -170,11 +218,13 @@ namespace Thirdweb.Unity
 
         public IThirdwebWallet ActiveWallet { get; private set; }
 
+        public bool Initialized { get; private set; }
+
         public static ThirdwebManager Instance { get; private set; }
 
         public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.14.0";
 
-        private bool _initialized;
+        private const string THIRDWEB_AUTO_CONNECT_OPTIONS_KEY = "ThirdwebAutoConnectOptions";
 
         private Dictionary<string, IThirdwebWallet> _walletMapping;
 
@@ -199,7 +249,7 @@ namespace Thirdweb.Unity
             }
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             if (string.IsNullOrEmpty(ClientId))
             {
@@ -229,12 +279,26 @@ namespace Thirdweb.Unity
 
             _walletMapping = new Dictionary<string, IThirdwebWallet>();
 
-            _initialized = true;
+            if (AutoConnectLastWallet && GetAutoConnectOptions(out var lastWalletOptions))
+            {
+                ThirdwebDebug.Log("Auto-connecting to last wallet.");
+                try
+                {
+                    _ = await ConnectWallet(lastWalletOptions);
+                    ThirdwebDebug.Log("Auto-connected to last wallet.");
+                }
+                catch (Exception e)
+                {
+                    ThirdwebDebug.LogError("Failed to auto-connect to last wallet: " + e.Message);
+                }
+            }
+
+            Initialized = true;
         }
 
         public async Task<ThirdwebContract> GetContract(string address, BigInteger chainId, string abi = null)
         {
-            if (!_initialized)
+            if (!Initialized)
             {
                 throw new InvalidOperationException("ThirdwebManager is not initialized.");
             }
@@ -279,11 +343,6 @@ namespace Thirdweb.Unity
 
         public async Task<IThirdwebWallet> ConnectWallet(WalletOptions walletOptions)
         {
-            if (!_initialized)
-            {
-                throw new InvalidOperationException("ThirdwebManager is not initialized.");
-            }
-
             if (walletOptions == null)
             {
                 throw new ArgumentNullException(nameof(walletOptions));
@@ -420,7 +479,6 @@ namespace Thirdweb.Unity
             }
 
             var address = await wallet.GetAddress();
-            ThirdwebDebug.Log($"Wallet address: {address}");
 
             var isSmartWallet = walletOptions.SmartWalletOptions != null;
 
@@ -428,6 +486,8 @@ namespace Thirdweb.Unity
             {
                 TrackUsage("connectWallet", "connect", isSmartWallet ? "smartWallet" : walletOptions.Provider.ToString()[..1].ToLower() + walletOptions.Provider.ToString()[1..], address);
             }
+
+            SetAutoConnectOptions(walletOptions);
 
             if (isSmartWallet)
             {
@@ -444,11 +504,6 @@ namespace Thirdweb.Unity
 
         public async Task<SmartWallet> UpgradeToSmartWallet(IThirdwebWallet personalWallet, BigInteger chainId, SmartWalletOptions smartWalletOptions)
         {
-            if (!_initialized)
-            {
-                throw new InvalidOperationException("ThirdwebManager is not initialized.");
-            }
-
             if (personalWallet.AccountType == ThirdwebAccountType.SmartAccount)
             {
                 ThirdwebDebug.LogWarning("Wallet is already a SmartWallet.");
@@ -480,6 +535,12 @@ namespace Thirdweb.Unity
             await AddWallet(wallet);
             SetActiveWallet(wallet);
 
+            if (AutoConnectLastWallet && GetAutoConnectOptions(out var lastWalletOptions))
+            {
+                lastWalletOptions.SmartWalletOptions = smartWalletOptions;
+                SetAutoConnectOptions(lastWalletOptions);
+            }
+
             return wallet;
         }
 
@@ -496,6 +557,44 @@ namespace Thirdweb.Unity
                 jwt: jwtOrPayload,
                 payload: jwtOrPayload
             );
+        }
+
+        private bool GetAutoConnectOptions(out WalletOptions lastWalletOptions)
+        {
+            var connectOptionsStr = PlayerPrefs.GetString(THIRDWEB_AUTO_CONNECT_OPTIONS_KEY, null);
+            if (!string.IsNullOrEmpty(connectOptionsStr))
+            {
+                try
+                {
+                    lastWalletOptions = JsonConvert.DeserializeObject<WalletOptions>(connectOptionsStr);
+                    return true;
+                }
+                catch
+                {
+                    ThirdwebDebug.LogWarning("Failed to load last wallet options.");
+                    PlayerPrefs.DeleteKey(THIRDWEB_AUTO_CONNECT_OPTIONS_KEY);
+                    lastWalletOptions = null;
+                    return false;
+                }
+            }
+            lastWalletOptions = null;
+            return false;
+        }
+
+        private void SetAutoConnectOptions(WalletOptions walletOptions)
+        {
+            if (AutoConnectLastWallet && walletOptions.Provider != WalletProvider.WalletConnectWallet)
+            {
+                try
+                {
+                    PlayerPrefs.SetString(THIRDWEB_AUTO_CONNECT_OPTIONS_KEY, JsonConvert.SerializeObject(walletOptions));
+                }
+                catch
+                {
+                    ThirdwebDebug.LogWarning("Failed to save last wallet options.");
+                    PlayerPrefs.DeleteKey(THIRDWEB_AUTO_CONNECT_OPTIONS_KEY);
+                }
+            }
         }
 
         private async void TrackUsage(string source, string action, string walletType, string walletAddress)
