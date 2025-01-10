@@ -4,37 +4,26 @@ using System.Numerics;
 
 namespace Thirdweb.Unity
 {
-    public class ThirdwebManager : ThirdwebManagerBase
+    public class ThirdwebManagerServer : ThirdwebManagerBase
     {
         [field: SerializeField]
-        private string ClientId { get; set; }
+        private string SecretKey { get; set; }
 
-        [field: SerializeField]
-        private string BundleId { get; set; }
-
-        public new static ThirdwebManager Instance
+        public new static ThirdwebManagerServer Instance
         {
-            get => ThirdwebManagerBase.Instance as ThirdwebManager;
+            get => ThirdwebManagerBase.Instance as ThirdwebManagerServer;
         }
 
         protected override ThirdwebClient CreateClient()
         {
-            if (string.IsNullOrEmpty(ClientId))
+            if (string.IsNullOrEmpty(SecretKey))
             {
-                ThirdwebDebug.LogError("ClientId must be set in order to initialize ThirdwebManager. " + "Get your API key from https://thirdweb.com/create-api-key");
+                ThirdwebDebug.LogError("SecretKey must be set in order to initialize ThirdwebManagerServer.");
                 return null;
             }
 
-            if (string.IsNullOrEmpty(BundleId))
-            {
-                BundleId = null;
-            }
-
-            BundleId ??= Application.identifier ?? $"com.{Application.companyName}.{Application.productName}";
-
             return ThirdwebClient.Create(
-                clientId: ClientId,
-                bundleId: BundleId,
+                secretKey: SecretKey,
                 httpClient: new CrossPlatformUnityHttpClient(),
                 sdkName: Application.platform == RuntimePlatform.WebGLPlayer ? "UnitySDK_WebGL" : "UnitySDK",
                 sdkOs: Application.platform.ToString(),
@@ -46,6 +35,6 @@ namespace Thirdweb.Unity
             );
         }
 
-        protected override string MobileRedirectScheme => BundleId + "://";
+        protected override string MobileRedirectScheme => "tw-server://";
     }
 }
