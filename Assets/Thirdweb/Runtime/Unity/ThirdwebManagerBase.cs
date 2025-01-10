@@ -359,7 +359,8 @@ namespace Thirdweb.Unity
                         authProvider: walletOptions.InAppWalletOptions.AuthProvider,
                         storageDirectoryPath: walletOptions.InAppWalletOptions.StorageDirectoryPath,
                         siweSigner: walletOptions.InAppWalletOptions.SiweSigner,
-                        legacyEncryptionKey: walletOptions.InAppWalletOptions.LegacyEncryptionKey
+                        legacyEncryptionKey: walletOptions.InAppWalletOptions.LegacyEncryptionKey,
+                        walletSecret: walletOptions.InAppWalletOptions.WalletSecret
                     );
                     break;
 
@@ -381,7 +382,8 @@ namespace Thirdweb.Unity
                         authProvider: walletOptions.EcosystemWalletOptions.AuthProvider,
                         storageDirectoryPath: walletOptions.EcosystemWalletOptions.StorageDirectoryPath,
                         siweSigner: walletOptions.EcosystemWalletOptions.SiweSigner,
-                        legacyEncryptionKey: walletOptions.EcosystemWalletOptions.LegacyEncryptionKey
+                        legacyEncryptionKey: walletOptions.EcosystemWalletOptions.LegacyEncryptionKey,
+                        walletSecret: walletOptions.EcosystemWalletOptions.WalletSecret
                     );
                     break;
 
