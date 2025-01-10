@@ -25,7 +25,7 @@ namespace Thirdweb.Unity
 
         public static async Task<SmartWallet> UpgradeToSmartWallet(this IThirdwebWallet personalWallet, BigInteger chainId, SmartWalletOptions smartWalletOptions)
         {
-            return await ThirdwebManager.Instance.UpgradeToSmartWallet(personalWallet, chainId, smartWalletOptions);
+            return await ThirdwebManagerBase.Instance.UpgradeToSmartWallet(personalWallet, chainId, smartWalletOptions);
         }
 
         public static Texture2D ToQRTexture(this string textForEncoding, Color? fgColor = null, Color? bgColor = null, int width = 512, int height = 512)
