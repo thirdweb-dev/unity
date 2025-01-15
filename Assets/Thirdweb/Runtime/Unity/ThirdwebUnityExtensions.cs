@@ -1,13 +1,44 @@
+using System;
 using System.Numerics;
 using System.Threading.Tasks;
 using UnityEngine;
 using ZXing;
 using ZXing.QrCode;
 
+#if UNITY_WEBGL
+using System.Runtime.InteropServices;
+#endif
+
 namespace Thirdweb.Unity
 {
     public static class ThirdwebUnityExtensions
     {
+#if UNITY_WEBGL
+        [DllImport("__Internal")]
+        private static extern string ThirdwebCopyBuffer(string text);
+#endif
+
+        public static void CopyToClipboard(this string text)
+        {
+            try
+            {
+                if (Application.platform == RuntimePlatform.WebGLPlayer)
+                {
+#if UNITY_WEBGL
+                    ThirdwebCopyBuffer(text);
+#endif
+                }
+                else
+                {
+                    GUIUtility.systemCopyBuffer = text;
+                }
+            }
+            catch (Exception e)
+            {
+                ThirdwebDebug.LogWarning($"Failed to copy to clipboard: {e}");
+            }
+        }
+
         public static async Task<Sprite> GetNFTSprite(this NFT nft, ThirdwebClient client)
         {
             var bytes = await nft.GetNFTImageBytes(client);
