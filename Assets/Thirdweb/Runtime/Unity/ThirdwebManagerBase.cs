@@ -30,7 +30,8 @@ namespace Thirdweb.Unity
             string storageDirectoryPath = null,
             IThirdwebWallet siweSigner = null,
             string legacyEncryptionKey = null,
-            string walletSecret = null
+            string walletSecret = null,
+            List<string> forceSiweExternalWalletIds = null
         )
             : base(
                 email: email,
@@ -40,7 +41,8 @@ namespace Thirdweb.Unity
                 storageDirectoryPath: storageDirectoryPath,
                 siweSigner: siweSigner,
                 legacyEncryptionKey: legacyEncryptionKey,
-                walletSecret: walletSecret
+                walletSecret: walletSecret,
+                forceSiweExternalWalletIds: forceSiweExternalWalletIds
             ) { }
     }
 
@@ -77,6 +79,9 @@ namespace Thirdweb.Unity
         [JsonProperty("walletSecret")]
         public string WalletSecret;
 
+        [JsonProperty("forceSiweExternalWalletIds")]
+        public List<string> ForceSiweExternalWalletIds;
+
         public EcosystemWalletOptions(
             string ecosystemId = null,
             string ecosystemPartnerId = null,
@@ -87,7 +92,8 @@ namespace Thirdweb.Unity
             string storageDirectoryPath = null,
             IThirdwebWallet siweSigner = null,
             string legacyEncryptionKey = null,
-            string walletSecret = null
+            string walletSecret = null,
+            List<string> forceSiweExternalWalletIds = null
         )
         {
             EcosystemId = ecosystemId;
@@ -100,6 +106,7 @@ namespace Thirdweb.Unity
             SiweSigner = siweSigner;
             LegacyEncryptionKey = legacyEncryptionKey;
             WalletSecret = walletSecret;
+            ForceSiweExternalWalletIds = forceSiweExternalWalletIds;
         }
     }
 
@@ -214,9 +221,6 @@ namespace Thirdweb.Unity
 
         [field: SerializeField]
         protected List<RpcOverride> RpcOverrides { get; set; } = null;
-
-        [field: SerializeField]
-        protected List<string> SiweExternalForcedWalletIds { get; set; } = null;
 
         public ThirdwebClient Client { get; protected set; }
         public IThirdwebWallet ActiveWallet { get; protected set; }
@@ -444,7 +448,9 @@ namespace Thirdweb.Unity
                         _ = await inAppWallet.LoginWithSiweExternal(
                             isMobile: Application.isMobilePlatform,
                             browserOpenAction: (url) => Application.OpenURL(url),
-                            forceWalletIds: SiweExternalForcedWalletIds == null || SiweExternalForcedWalletIds.Count == 0 ? null : SiweExternalForcedWalletIds,
+                            forceWalletIds: walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds.Count == 0
+                                ? null
+                                : walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds,
                             mobileRedirectScheme: MobileRedirectScheme,
                             browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
                         );
@@ -491,7 +497,9 @@ namespace Thirdweb.Unity
                         _ = await ecosystemWallet.LoginWithSiweExternal(
                             isMobile: Application.isMobilePlatform,
                             browserOpenAction: (url) => Application.OpenURL(url),
-                            forceWalletIds: SiweExternalForcedWalletIds == null || SiweExternalForcedWalletIds.Count == 0 ? null : SiweExternalForcedWalletIds,
+                            forceWalletIds: walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds.Count == 0
+                                ? null
+                                : walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds,
                             mobileRedirectScheme: MobileRedirectScheme,
                             browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
                         );
