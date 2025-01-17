@@ -215,6 +215,9 @@ namespace Thirdweb.Unity
         [field: SerializeField]
         protected List<RpcOverride> RpcOverrides { get; set; } = null;
 
+        [field: SerializeField]
+        protected List<string> SiweExternalForcedWalletIds { get; set; } = null;
+
         public ThirdwebClient Client { get; protected set; }
         public IThirdwebWallet ActiveWallet { get; protected set; }
         public bool Initialized { get; protected set; }
@@ -286,6 +289,10 @@ namespace Thirdweb.Unity
             Initialized = true;
         }
 
+        // ------------------------------------------------------
+        // Contract Methods
+        // ------------------------------------------------------
+
         public virtual async Task<ThirdwebContract> GetContract(string address, BigInteger chainId, string abi = null)
         {
             if (!Initialized)
@@ -295,6 +302,10 @@ namespace Thirdweb.Unity
 
             return await ThirdwebContract.Create(Client, address, chainId, abi);
         }
+
+        // ------------------------------------------------------
+        // Active Wallet Methods
+        // ------------------------------------------------------
 
         public virtual IThirdwebWallet GetActiveWallet()
         {
@@ -330,6 +341,10 @@ namespace Thirdweb.Unity
                 _walletMapping.Remove(address, out var _);
             }
         }
+
+        // ------------------------------------------------------
+        // Connection Methods
+        // ------------------------------------------------------
 
         public virtual async Task<IThirdwebWallet> ConnectWallet(WalletOptions walletOptions)
         {
@@ -420,10 +435,19 @@ namespace Thirdweb.Unity
                         _ = await inAppWallet.LoginWithAuthEndpoint(walletOptions.InAppWalletOptions.JwtOrPayload);
                         break;
                     case AuthProvider.Guest:
-                        _ = await inAppWallet.LoginWithGuest();
+                        _ = await inAppWallet.LoginWithGuest(SystemInfo.deviceUniqueIdentifier);
                         break;
                     case AuthProvider.Backend:
                         _ = await inAppWallet.LoginWithBackend();
+                        break;
+                    case AuthProvider.SiweExternal:
+                        _ = await inAppWallet.LoginWithSiweExternal(
+                            isMobile: Application.isMobilePlatform,
+                            browserOpenAction: (url) => Application.OpenURL(url),
+                            forceWalletIds: SiweExternalForcedWalletIds == null || SiweExternalForcedWalletIds.Count == 0 ? null : SiweExternalForcedWalletIds,
+                            mobileRedirectScheme: MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                        );
                         break;
                     default:
                         _ = await inAppWallet.LoginWithOauth(
@@ -458,10 +482,19 @@ namespace Thirdweb.Unity
                         _ = await ecosystemWallet.LoginWithAuthEndpoint(walletOptions.EcosystemWalletOptions.JwtOrPayload);
                         break;
                     case AuthProvider.Guest:
-                        _ = await ecosystemWallet.LoginWithGuest();
+                        _ = await ecosystemWallet.LoginWithGuest(SystemInfo.deviceUniqueIdentifier);
                         break;
                     case AuthProvider.Backend:
                         _ = await ecosystemWallet.LoginWithBackend();
+                        break;
+                    case AuthProvider.SiweExternal:
+                        _ = await ecosystemWallet.LoginWithSiweExternal(
+                            isMobile: Application.isMobilePlatform,
+                            browserOpenAction: (url) => Application.OpenURL(url),
+                            forceWalletIds: SiweExternalForcedWalletIds == null || SiweExternalForcedWalletIds.Count == 0 ? null : SiweExternalForcedWalletIds,
+                            mobileRedirectScheme: MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                        );
                         break;
                     default:
                         _ = await ecosystemWallet.LoginWithOauth(
