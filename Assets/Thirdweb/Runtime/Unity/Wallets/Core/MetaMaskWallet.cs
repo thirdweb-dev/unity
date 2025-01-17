@@ -191,11 +191,42 @@ namespace Thirdweb.Unity
             throw new NotImplementedException();
         }
 
-        public Task Disconnect()
+               public async Task Disconnect()
+{
+    // Attempt to revoke "eth_accounts" permissions so the user has to re-approve next time
+    ThirdwebDebug.Log("Attempting to revoke MetaMask site permissions...");
+
+    // Construct the request using "wallet_revokePermissions".
+    var rpcRequest = new RpcRequest
+    {
+        Method = "wallet_revokePermissions",
+        // Expecting an array of permission types, here we just revoke 'eth_accounts'
+        Params = new object[]
         {
-            ThirdwebDebug.Log("Disconnecting has no effect on this wallet.");
-            return Task.CompletedTask;
+            new Dictionary<string, object>
+            {
+                { "eth_accounts", new object() }
+            }
         }
+    };
+
+    try
+    {
+        // Make the call to MetaMask via WebGL bridge.
+        var result = await WebGLMetaMask.Instance.RequestAsync<string>(rpcRequest);
+
+        ThirdwebDebug.Log($"Revoke permissions result: {result}");
+    }
+    catch (Exception ex)
+    {
+        // If the user’s wallet does not support 'wallet_revokePermissions'
+        // or if the user cancels, it gets an error
+        ThirdwebDebug.Log($"Failed to revoke permissions: {ex.Message}");
+    }
+
+    
+    ThirdwebDebug.Log("Disconnect complete (attempted revoke).");
+}
 
         public Task<List<LinkedAccount>> LinkAccount(
             IThirdwebWallet walletToLink,
