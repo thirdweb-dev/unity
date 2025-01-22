@@ -19,18 +19,18 @@ namespace Thirdweb.Unity
 
         protected override ThirdwebClient CreateClient()
         {
-            if (string.IsNullOrEmpty(ClientId))
+            if (string.IsNullOrWhiteSpace(ClientId))
             {
                 ThirdwebDebug.LogError("ClientId must be set in order to initialize ThirdwebManager. " + "Get your API key from https://thirdweb.com/create-api-key");
                 return null;
             }
 
-            if (string.IsNullOrEmpty(BundleId))
+            if (string.IsNullOrWhiteSpace(BundleId))
             {
                 BundleId = null;
             }
 
-            BundleId ??= Application.identifier ?? $"com.{Application.companyName}.{Application.productName}";
+            BundleId ??= string.IsNullOrWhiteSpace(Application.identifier) ? $"com.{Application.companyName}.{Application.productName}" : Application.identifier;
 
             return ThirdwebClient.Create(
                 clientId: ClientId,

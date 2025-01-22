@@ -237,7 +237,9 @@ namespace Thirdweb.Unity
             IThirdwebBrowser browser = null,
             BigInteger? chainId = null,
             string jwt = null,
-            string payload = null
+            string payload = null,
+            string defaultSessionIdOverride = null,
+            List<string> forceWalletIds = null
         )
         {
             throw new InvalidOperationException("LinkAccount is not supported by external wallets.");
