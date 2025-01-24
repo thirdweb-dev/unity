@@ -192,10 +192,18 @@ namespace Thirdweb.Unity
             throw new NotImplementedException();
         }
 
-        public Task Disconnect()
+        public async Task Disconnect()
         {
-            ThirdwebDebug.Log("Disconnecting has no effect on this wallet.");
-            return Task.CompletedTask;
+            try
+            {
+                _ = await WebGLMetaMask.Instance.RequestAsync<string>(
+                    new RpcRequest { Method = "wallet_revokePermissions", Params = new object[] { new Dictionary<string, object> { { "eth_accounts", new object() } } } }
+                );
+            }
+            catch
+            {
+                // no-op
+            }
         }
 
         public Task<List<LinkedAccount>> LinkAccount(
