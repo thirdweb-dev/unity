@@ -28,6 +28,7 @@ This SDK provides a Unity-first integration of all [thirdweb](https://thirdweb.c
 - First party support for [Account Abstraction](https://portal.thirdweb.com/connect/account-abstraction/overview) (Both EIP-4337 & zkSync Native AA).
 - Instant connection to any chain with RPC Edge integration.
 - Integrated IPFS upload/download.
+- Create blockchain-powered agents with Thirdweb [Nebula](https://thirdweb.com/nebula).
 - Easy to extend or wrap.
 - High level contract extensions for interacting with common standards and thirdweb contract standards.
 - Automatic ABI resolution.
