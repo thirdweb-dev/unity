@@ -10,7 +10,6 @@ namespace Thirdweb.Editor
     {
         protected SerializedProperty initializeOnAwakeProp;
         protected SerializedProperty showDebugLogsProp;
-        protected SerializedProperty optOutUsageAnalyticsProp;
         protected SerializedProperty autoConnectLastWalletProp;
         protected SerializedProperty supportedChainsProp;
         protected SerializedProperty includedWalletIdsProp;
@@ -27,7 +26,6 @@ namespace Thirdweb.Editor
         {
             initializeOnAwakeProp = FindProp("InitializeOnAwake");
             showDebugLogsProp = FindProp("ShowDebugLogs");
-            optOutUsageAnalyticsProp = FindProp("OptOutUsageAnalytics");
             autoConnectLastWalletProp = FindProp("AutoConnectLastWallet");
             supportedChainsProp = FindProp("SupportedChains");
             includedWalletIdsProp = FindProp("IncludedWalletIds");
@@ -83,7 +81,6 @@ namespace Thirdweb.Editor
             EditorGUILayout.HelpBox("Set your preferences and initialization options here.", MessageType.Info);
             DrawProperty(initializeOnAwakeProp, "Initialize On Awake");
             DrawProperty(showDebugLogsProp, "Show Debug Logs");
-            DrawProperty(optOutUsageAnalyticsProp, "Opt-Out of Usage Analytics");
             DrawProperty(autoConnectLastWalletProp, "Auto-Connect Last Wallet");
         }
 
