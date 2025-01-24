@@ -205,9 +205,6 @@ namespace Thirdweb.Unity
         protected bool ShowDebugLogs { get; set; } = true;
 
         [field: SerializeField]
-        protected bool OptOutUsageAnalytics { get; set; } = false;
-
-        [field: SerializeField]
         protected bool AutoConnectLastWallet { get; set; } = false;
 
         [field: SerializeField]
@@ -518,12 +515,6 @@ namespace Thirdweb.Unity
             var address = await wallet.GetAddress();
             var isSmartWallet = walletOptions.SmartWalletOptions != null;
 
-            if (!OptOutUsageAnalytics)
-            {
-                var typeString = isSmartWallet ? "smartWallet" : walletOptions.Provider.ToString()[..1].ToLower() + walletOptions.Provider.ToString()[1..];
-                TrackUsage("connectWallet", "connect", typeString, address);
-            }
-
             SetAutoConnectOptions(walletOptions);
 
             // If SmartWallet, do upgrade
@@ -633,37 +624,6 @@ namespace Thirdweb.Unity
                     ThirdwebDebug.LogWarning("Failed to save last wallet options.");
                     PlayerPrefs.DeleteKey(THIRDWEB_AUTO_CONNECT_OPTIONS_KEY);
                 }
-            }
-        }
-
-        protected virtual async void TrackUsage(string source, string action, string walletType, string walletAddress)
-        {
-            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(action) || string.IsNullOrEmpty(walletType) || string.IsNullOrEmpty(walletAddress))
-            {
-                ThirdwebDebug.LogWarning("Invalid usage analytics parameters.");
-                return;
-            }
-
-            try
-            {
-                var content = new System.Net.Http.StringContent(
-                    JsonConvert.SerializeObject(
-                        new
-                        {
-                            source,
-                            action,
-                            walletAddress,
-                            walletType,
-                        }
-                    ),
-                    System.Text.Encoding.UTF8,
-                    "application/json"
-                );
-                _ = await Client.HttpClient.PostAsync("https://c.thirdweb.com/event", content);
-            }
-            catch
-            {
-                ThirdwebDebug.LogWarning("Failed to report usage analytics.");
             }
         }
     }

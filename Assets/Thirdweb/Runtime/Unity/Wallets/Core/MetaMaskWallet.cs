@@ -16,6 +16,7 @@ namespace Thirdweb.Unity
     public class MetaMaskWallet : IThirdwebWallet
     {
         public ThirdwebClient Client => _client;
+        public string WalletId => "metamask";
         public ThirdwebAccountType AccountType => ThirdwebAccountType.ExternalAccount;
 
         private static ThirdwebClient _client;

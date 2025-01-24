@@ -18,7 +18,7 @@ namespace Thirdweb.Unity
     public class WalletConnectWallet : IThirdwebWallet
     {
         public ThirdwebClient Client => _client;
-
+        public string WalletId => "walletconnect";
         public ThirdwebAccountType AccountType => ThirdwebAccountType.ExternalAccount;
 
         protected ThirdwebClient _client;
