@@ -41,12 +41,12 @@ This SDK provides a Unity-first integration of all [thirdweb](https://thirdweb.c
 
 | Wallet Provider                                              | Web | Standalone | Mobile |
 | ------------------------------------------------------------ | :---: | :-----: | :----: |
-| **In-App Wallet** (Guest, Email, Phone, Socials, Custom)     |  ✔️   |   ✔️    |   ✔️   |
+| **In-App Wallet** (Guest, Email, Phone, Socials, Backend, Custom)     |  ✔️   |   ✔️    |   ✔️   |
 | **Ecosystem Wallet** (IAW w/ partner permissions)            |  ✔️   |   ✔️    |   ✔️   |
 | **Private Key Wallet** (Ephemereal, good for testing)        |  ✔️   |   ✔️    |   ✔️   |
 | **Wallet Connect Wallet** (400+ Wallets)                     |  ✔️   |   ✔️    |   ✔️   |
 | **MetaMask Wallet** (Browser Extension)                      |  ✔️   |    —    |   —    |
-| **Smart Wallet** (Account Abstraction: 4337 & ZkSync Native) |  ✔️   |   ✔️    |   ✔️   |
+| **Smart Wallet** (Account Abstraction: 4337, ZkSync Native, 7702) |  ✔️   |   ✔️    |   ✔️   |
 
 <sub>✔️ Supported</sub> &nbsp; <sub>❌ Not Supported</sub> &nbsp; <sub>— Not Applicable</sub>
 
