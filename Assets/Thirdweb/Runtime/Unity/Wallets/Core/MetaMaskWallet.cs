@@ -39,7 +39,6 @@ namespace Thirdweb.Unity
             {
                 ThirdwebDebug.Log("MetaMask already initialized.");
                 await mmWallet.SwitchNetwork(activeChainId);
-                return mmWallet;
             }
             else
             {
@@ -52,7 +51,6 @@ namespace Thirdweb.Unity
                     {
                         ThirdwebDebug.Log("MetaMask initialized successfully.");
                         await mmWallet.SwitchNetwork(activeChainId);
-                        return mmWallet;
                     }
                     else
                     {
@@ -64,6 +62,8 @@ namespace Thirdweb.Unity
                     throw new Exception("MetaMask is not available.");
                 }
             }
+            Utils.TrackConnection(mmWallet);
+            return mmWallet;
         }
 
         #region IThirdwebWallet

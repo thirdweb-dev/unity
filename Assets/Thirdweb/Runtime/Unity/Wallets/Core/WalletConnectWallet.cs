@@ -92,7 +92,9 @@ namespace Thirdweb.Unity
                 _walletConnectService = new WalletConnectServiceCore(WalletConnect.Instance.SignClient);
             }
 
-            return new WalletConnectWallet(client);
+            var wcw = new WalletConnectWallet(client);
+            Utils.TrackConnection(wcw);
+            return wcw;
         }
 
         public async Task SwitchNetwork(BigInteger chainId)
