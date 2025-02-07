@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Numerics;
 
 namespace Thirdweb.Unity.Examples
 {
@@ -125,7 +127,6 @@ namespace Thirdweb.Unity.Examples
             currentPanel.Action1Button.onClick.AddListener(async () =>
             {
                 var address = await wallet.GetAddress();
-                address.CopyToClipboard();
                 Log(currentPanel.LogText, $"Address: {address}");
             });
 
@@ -333,7 +334,7 @@ namespace Thirdweb.Unity.Examples
             panel.BackButton.onClick.AddListener(InitializePanels);
 
             panel.NextButton.onClick.RemoveAllListeners();
-            panel.NextButton.onClick.AddListener(InitializeAccountAbstractionPanel);
+            panel.NextButton.onClick.AddListener(InitializeCustomContractsPanel);
 
             // Get NFT
             panel.Action1Button.onClick.RemoveAllListeners();
@@ -395,6 +396,181 @@ namespace Thirdweb.Unity.Examples
             });
         }
 
+           private void InitializeCustomContractsPanel()
+        {
+            var panel = WalletPanels.Find(walletPanel => walletPanel.Identifier == "CustomContracts");
+
+            CloseAllPanels();
+
+            ClearLog(panel.LogText);
+            panel.Panel.SetActive(true);
+
+            panel.BackButton.onClick.RemoveAllListeners();
+            panel.BackButton.onClick.AddListener(InitializePanels);
+
+            panel.NextButton.onClick.RemoveAllListeners();
+            panel.NextButton.onClick.AddListener(InitializeAccountAbstractionPanel);
+
+            //--CUSTOM READ CONTRACT BUTTON--//
+            panel.Action1Button.onClick.RemoveAllListeners();
+            panel.Action1Button.onClick.AddListener(async () =>
+            {
+              try
+                {
+
+                // Set your smart contract address "0x..."
+                    string CustomContractAddress = ""; 
+                // Set your smart contract method "myMethod"
+                    string smartContractMethod = ""; 
+                // Set parameter amount, value (in this case we are using string for an address type value). 
+                // Check Learn About parameters in playground scene for more information.
+                    string parameter1 = ""; 
+                //  string parameter2 = ""; (optional)
+                //  string parameter3 = ""; (optional)
+
+                //Check if smartcontract is set.
+                    if (string.IsNullOrEmpty(CustomContractAddress))
+                    {
+                        Log(panel.LogText, $"Error: You need to set 'CustomContractAddress' in PlaygroundManager.cs on line 423");
+                        return;            
+                    }        
+                //Check if smartcontract is set. 
+                    if (string.IsNullOrEmpty(smartContractMethod))
+                    {
+                        Log(panel.LogText, $"Error: You need to set the 'smartContractMethod' that you want to READ in PlaygroundManager.cs on line 425");
+                        return; 
+                    }       
+                //Check if parameter1 is set. 
+                    if (string.IsNullOrEmpty(parameter1))
+                    {
+                        Log(panel.LogText, $"Error: You need to set 'parameter1' in PlaygroundManager.cs on line 427.");
+                        return; 
+                    }
+
+                // Initialize the contract
+                    var contract = await ThirdwebManager.Instance.GetContract(address: CustomContractAddress, chainId: ActiveChainId);
+                
+                    Log(panel.LogText, $"Reading {smartContractMethod} Method for the contract address: {CustomContractAddress}");
+
+                // Call the read method with desired type value 
+                    string result = await contract.Read<string>(
+                        smartContractMethod, // Your smartcontract Method
+                        parameter1           // Optional depending on the method. Add or remove parameters if required.
+                    // parameter2,
+                    // parameter3,
+                    // parameter4
+                    );
+
+                    Log(panel.LogText, $"Success! You made your first Read Method! Result: {result}");
+
+                }
+                catch (System.Exception ex)
+                {
+                                    Debug.LogError($"[PlaygroundManager] Error:{ex.Message}");
+                    Log(panel.LogText, $"Error:\n"+
+                                    $"Check that your smartcontract address is correct and the chain is correct in inspector\n"+
+                                    $"Check that read Method name is correct\n"+
+                                    $"Check the required amount of parameters and it's value type is correct"        
+                        );
+                }
+            });
+
+
+            //--CUSTOM WRITE CONTRACT BUTTON--//
+            panel.Action2Button.onClick.RemoveAllListeners();
+            panel.Action2Button.onClick.AddListener(async () =>
+            {
+               try
+                {
+                // Set your smart contract address "0x..."
+                    string CustomContractAddress = ""; 
+                // Set your smart contract method "myMethod"
+                    string smartContractMethod = ""; 
+                // Set parameter amount, value type and it's value 
+                    string parameter1 = ""; 
+                //  string parameter2 = ""; (optional)
+                //  string parameter3 = ""; (optional)
+
+                //Check if smartcontract is set.
+                    if (string.IsNullOrEmpty(CustomContractAddress))
+                    {
+                        Log(panel.LogText, $"Error: You need to set 'CustomContractAddress' in PlaygroundManager.cs on line 485");
+                        return;            
+                    }        
+                //Check if smartcontract is set. 
+                    if (string.IsNullOrEmpty(smartContractMethod))
+                    {
+                        Log(panel.LogText, $"Error: You need to set the 'smartContractMethod' that you want to WRITE in PlaygroundManager.cs on line 487");
+                        return; 
+                    }       
+                //Check if parameter1 is set. 
+                    if (string.IsNullOrEmpty(parameter1))
+                    {
+                        Log(panel.LogText, $"Error: You need to set 'parameter1' in PlaygroundManager.cs on line 489.");
+                        return; 
+                    }
+
+                //Initialize contract, wallet and Weivalue
+                    var contract = await ThirdwebManager.Instance.GetContract(address: CustomContractAddress, chainId: ActiveChainId);
+                    var activeWallet = ThirdwebManager.Instance.GetActiveWallet();
+                    BigInteger weiValue = BigInteger.Parse("0"); // 0 ETH. add the required eth value in WEI
+                
+                
+                    Log(panel.LogText, $"Writing {smartContractMethod} Method for the contract address:{CustomContractAddress} ");
+                
+                //Write Method call
+                    var receipt = await ThirdwebContract.Write(
+                        activeWallet,       //Required Parameter in all write contract calls.
+                        contract,           //Required Parameter in all write contract calls.
+                        smartContractMethod,//Required Parameter in all write contract calls.
+                        weiValue,           //Required Parameter in all write contract calls.
+                        parameter1          //First Read Parameter 1. Add or remove depending on the method parameter amount
+                    // parameter2,                 
+                    // parameter3,
+                    // parameter4  
+                    );
+
+                    Log(panel.LogText, $"[PlaygroundManager] Success! You made your first Write Method from unity!\n"+
+                                       $"TX hash: {receipt.TransactionHash}"
+                        );
+                                
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"[PlaygroundManager] Error in Write custom smartcontract: {ex.Message}");
+                    Log(panel.LogText, $"Error:\n"+
+                        $"Check that your smartcontract address is correct and the chain is correct in inspector\n"+
+                        $"Check that read Method name is correct\n"+
+                        $"Check the required amount of parameters and it's value type is correct"
+                        );   
+                }
+            });
+
+            panel.Action3Button.onClick.RemoveAllListeners();
+            panel.Action3Button.onClick.AddListener(() =>
+            {
+                InitializeLearnParameters();
+            });
+        }
+
+
+
+        private void InitializeLearnParameters()
+        {
+            
+            var panel = WalletPanels.Find(walletPanel => walletPanel.Identifier == "LearnParameters");
+
+            CloseAllPanels();
+
+            
+            panel.Panel.SetActive(true);
+
+            panel.BackButton.onClick.RemoveAllListeners();
+            panel.BackButton.onClick.AddListener(InitializeCustomContractsPanel);
+
+            // Personal Sign (1271)
+       }
+
         private async void InitializeAccountAbstractionPanel()
         {
             var currentWallet = ThirdwebManager.Instance.GetActiveWallet();
@@ -408,7 +584,7 @@ namespace Thirdweb.Unity.Examples
             panel.Panel.SetActive(true);
 
             panel.BackButton.onClick.RemoveAllListeners();
-            panel.BackButton.onClick.AddListener(InitializePanels);
+            panel.BackButton.onClick.AddListener(InitializeCustomContractsPanel);
 
             // Personal Sign (1271)
             panel.Action1Button.onClick.RemoveAllListeners();
