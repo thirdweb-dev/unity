@@ -16,12 +16,23 @@ namespace Thirdweb.Unity
                 htmlOverride = null;
             }
 
-            var go = new GameObject("WebGLInAppWalletBrowser");
-
 #if UNITY_EDITOR
             _unityBrowser = new InAppWalletBrowser(htmlOverride);
 #elif UNITY_WEBGL
-            _unityBrowser = go.AddComponent<WebGLInAppWalletBrowser>();
+#if UNITY_6000_0_OR_NEWER
+            var existingBrowser = UnityEngine.Object.FindAnyObjectByType<WebGLInAppWalletBrowser>();
+#else
+            var existingBrowser = GameObject.FindObjectOfType<WebGLInAppWalletBrowser>();
+#endif
+            if (existingBrowser != null)
+            {
+                _unityBrowser = existingBrowser;
+            }
+            else
+            {
+                var go = new GameObject("WebGLInAppWalletBrowser");
+                _unityBrowser = go.AddComponent<WebGLInAppWalletBrowser>();
+            }
 #elif UNITY_ANDROID
             _unityBrowser = new AndroidBrowser();
 #elif UNITY_IOS
