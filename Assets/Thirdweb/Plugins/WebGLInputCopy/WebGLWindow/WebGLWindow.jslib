@@ -1,18 +1,9 @@
+#if parseInt(EMSCRIPTEN_VERSION.split('.')[0]) < 2 || (parseInt(EMSCRIPTEN_VERSION.split('.')[0]) == 2 && parseInt(EMSCRIPTEN_VERSION.split('.')[1]) < 0) || (parseInt(EMSCRIPTEN_VERSION.split('.')[0]) == 2 && parseInt(EMSCRIPTEN_VERSION.split('.')[1]) == 0 && parseInt(EMSCRIPTEN_VERSION.split('.')[2]) < 3)
+#error "ThirdWeb plugin requires building with Emscripten 2.0.3 and Unity 2021.2 or newer. Please update"
+#endif
+
 var WebGLWindow = {
     WebGLWindowInit : function() {
-        // use WebAssembly.Table : makeDynCall
-        // when enable. dynCall is undefined
-        if(typeof dynCall === "undefined")
-        {
-            // make Runtime.dynCall to undefined
-            Runtime = { dynCall : undefined }
-        }
-        else
-        {
-            // Remove the `Runtime` object from "v1.37.27: 12/24/2017"
-            // if Runtime not defined. create and add functon!!
-            if(typeof Runtime === "undefined") Runtime = { dynCall : dynCall }
-        }
     },
     WebGLWindowGetCanvasName: function() {
         var elements = document.getElementsByTagName('canvas');
@@ -33,17 +24,17 @@ var WebGLWindow = {
     },
     WebGLWindowOnFocus: function (cb) {
         window.addEventListener('focus', function () {
-            (!!Runtime.dynCall) ? Runtime.dynCall("v", cb, []) : {{{ makeDynCall("v", "cb") }}}();
+            {{{ makeDynCall("v", "cb") }}}();
         });
     },
     WebGLWindowOnBlur: function (cb) {
         window.addEventListener('blur', function () {
-            (!!Runtime.dynCall) ? Runtime.dynCall("v", cb, []) : {{{ makeDynCall("v", "cb") }}}();
+            {{{ makeDynCall("v", "cb") }}}();
         });
     },
     WebGLWindowOnResize: function(cb) {
         window.addEventListener('resize', function () {
-            (!!Runtime.dynCall) ? Runtime.dynCall("v", cb, []) : {{{ makeDynCall("v", "cb") }}}();
+            {{{ makeDynCall("v", "cb") }}}();
         });
     },
     WebGLWindowInjectFullscreen : function () {
