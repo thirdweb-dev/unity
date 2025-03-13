@@ -225,7 +225,7 @@ namespace Thirdweb.Unity
 
         public static ThirdwebManagerBase Instance { get; protected set; }
 
-        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.18.5";
+        public static readonly string THIRDWEB_UNITY_SDK_VERSION = "5.18.6";
 
         protected const string THIRDWEB_AUTO_CONNECT_OPTIONS_KEY = "ThirdwebAutoConnectOptions";
 
@@ -288,6 +288,10 @@ namespace Thirdweb.Unity
             }
 
             Initialized = true;
+
+            var iawSiweExternal = await ConnectWallet(new WalletOptions(WalletProvider.InAppWallet, 421614, new InAppWalletOptions(authprovider: AuthProvider.SiweExternal)));
+            var iawSiweExternalAddress = await iawSiweExternal.GetAddress();
+            Debug.Log($"InAppWallet SiweExternal Address: {iawSiweExternalAddress}");
         }
 
         // ------------------------------------------------------
