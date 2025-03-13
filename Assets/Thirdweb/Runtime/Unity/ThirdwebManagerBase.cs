@@ -288,10 +288,6 @@ namespace Thirdweb.Unity
             }
 
             Initialized = true;
-
-            var iawSiweExternal = await ConnectWallet(new WalletOptions(WalletProvider.InAppWallet, 421614, new InAppWalletOptions(authprovider: AuthProvider.SiweExternal)));
-            var iawSiweExternalAddress = await iawSiweExternal.GetAddress();
-            Debug.Log($"InAppWallet SiweExternal Address: {iawSiweExternalAddress}");
         }
 
         // ------------------------------------------------------
