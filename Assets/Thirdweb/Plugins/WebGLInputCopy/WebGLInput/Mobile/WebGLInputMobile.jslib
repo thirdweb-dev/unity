@@ -6,7 +6,7 @@ var WebGLInputMobile = {
 
         document.body.addEventListener("touchend", function () {
             document.body.removeEventListener("touchend", arguments.callee);
-            Runtime.dynCall("vi", touchend, [id]);
+            {{{ makeDynCall("vi", "touchend") }}}(id);
         });
 
         return id;
@@ -14,7 +14,7 @@ var WebGLInputMobile = {
     WebGLInputMobileOnFocusOut: function (id, focusout) {
         document.body.addEventListener("focusout", function () {
             document.body.removeEventListener("focusout", arguments.callee);
-            Runtime.dynCall("vi", focusout, [id]);
+            {{{ makeDynCall("vi", "focusout") }}}(id);
         });
     },
 }

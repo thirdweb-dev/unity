@@ -15,7 +15,7 @@ var SystemThreadingTimerLib = {
 		setTimeout(function()
 		{
 			if (id === vars.currentCallbackId)
-				Runtime.dynCall('v', vars.callback);
+				{{{ makeDynCall("v", "vars.callback") }}}();
 		},
 		interval);
 	}
