@@ -46,6 +46,6 @@ namespace Thirdweb.Unity
             );
         }
 
-        protected override string MobileRedirectScheme => BundleId + "://";
+        public override string MobileRedirectScheme => BundleId + "://";
     }
 }

@@ -2887,7 +2887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b449f3a04d6c94eb686cd39ae75785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveChainId: 421614
+  ActiveChainId: 84532
   WebglForceMetamaskExtension: 1
   ConnectWalletPanel: {fileID: 974997944}
   PrivateKeyWalletButton: {fileID: 736464798}
@@ -2904,7 +2904,7 @@ MonoBehaviour:
     LogText: {fileID: 2031826890}
     InputField: {fileID: 0}
     InputFieldSubmitButton: {fileID: 0}
-  - Identifier: WalletConnectWallet
+  - Identifier: ReownWallet
     Panel: {fileID: 1922056857}
     Action1Button: {fileID: 1632196339}
     Action2Button: {fileID: 1340124642}
@@ -4228,6 +4228,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 376894756574179703, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753652708382381279, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753652708382381279, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753652708382381279, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753652708382381279, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 753652708382381279, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1288923049808236541, guid: f1f7a02a8c5efe54c95062bd90592227, type: 3}

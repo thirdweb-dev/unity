@@ -28,7 +28,6 @@ namespace Thirdweb.Unity
 
         [DllImport("__Internal")]
         private static extern void Request(string rpcRequestMessage, string gameObjectName, string callback, string fallback);
-
 #endif
 
         private static WebGLMetaMask _instance;

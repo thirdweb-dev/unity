@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEditor;
-using Thirdweb.Unity;
 using System.Reflection;
+using Thirdweb.Unity;
+using UnityEditor;
+using UnityEngine;
 
 namespace Thirdweb.Editor
 {
@@ -11,8 +11,6 @@ namespace Thirdweb.Editor
         protected SerializedProperty initializeOnAwakeProp;
         protected SerializedProperty showDebugLogsProp;
         protected SerializedProperty autoConnectLastWalletProp;
-        protected SerializedProperty supportedChainsProp;
-        protected SerializedProperty includedWalletIdsProp;
         protected SerializedProperty redirectPageHtmlOverrideProp;
         protected SerializedProperty rpcOverridesProp;
 
@@ -27,8 +25,6 @@ namespace Thirdweb.Editor
             initializeOnAwakeProp = FindProp("InitializeOnAwake");
             showDebugLogsProp = FindProp("ShowDebugLogs");
             autoConnectLastWalletProp = FindProp("AutoConnectLastWallet");
-            supportedChainsProp = FindProp("SupportedChains");
-            includedWalletIdsProp = FindProp("IncludedWalletIds");
             redirectPageHtmlOverrideProp = FindProp("RedirectPageHtmlOverride");
             rpcOverridesProp = FindProp("RpcOverrides");
 
@@ -90,10 +86,7 @@ namespace Thirdweb.Editor
             DrawProperty(rpcOverridesProp, "RPC Overrides");
             GUILayout.Space(10);
             EditorGUILayout.LabelField("OAuth Redirect Page HTML Override", EditorStyles.boldLabel);
-            redirectPageHtmlOverrideProp.stringValue = EditorGUILayout.TextArea(redirectPageHtmlOverrideProp.stringValue, GUILayout.MinHeight(75));
-            GUILayout.Space(10);
-            DrawProperty(supportedChainsProp, "WalletConnect Supported Chains");
-            DrawProperty(includedWalletIdsProp, "WalletConnect Included Wallet IDs");
+            redirectPageHtmlOverrideProp.stringValue = EditorGUILayout.TextArea(redirectPageHtmlOverrideProp.stringValue, GUILayout.MinHeight(150));
         }
 
         protected virtual void DrawDebugTab()
@@ -170,7 +163,7 @@ namespace Thirdweb.Editor
             {
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleLeft,
-                padding = new RectOffset(10, 10, 10, 10)
+                padding = new RectOffset(10, 10, 10, 10),
             };
         }
 

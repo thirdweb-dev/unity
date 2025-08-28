@@ -162,6 +162,50 @@ namespace Thirdweb.Unity
     }
 
     [Serializable]
+    public class ReownOptions
+    {
+        [JsonProperty("projectId")]
+        public string ProjectId;
+
+        [JsonProperty("name")]
+        public string Name;
+
+        [JsonProperty("description")]
+        public string Description;
+
+        [JsonProperty("url")]
+        public string Url;
+
+        [JsonProperty("iconUrl")]
+        public string IconUrl;
+
+        [JsonProperty("includedWalletIds")]
+        public string[] IncludedWalletIds;
+
+        [JsonProperty("excludedWalletIds")]
+        public string[] ExcludedWalletIds;
+
+        public ReownOptions(
+            string projectId = null,
+            string name = null,
+            string description = null,
+            string url = null,
+            string iconUrl = null,
+            string[] includedWalletIds = null,
+            string[] excludedWalletIds = null
+        )
+        {
+            ProjectId = projectId ?? "35603765088f9ed24db818100fdbb6f9";
+            Name = name ?? "thirdweb";
+            Description = description ?? "thirdweb powered game";
+            Url = url ?? "https://thirdweb.com";
+            IconUrl = iconUrl ?? "https://thirdweb.com/favicon.ico";
+            IncludedWalletIds = includedWalletIds;
+            ExcludedWalletIds = excludedWalletIds;
+        }
+    }
+
+    [Serializable]
     public class WalletOptions
     {
         [JsonProperty("provider")]
@@ -179,12 +223,16 @@ namespace Thirdweb.Unity
         [JsonProperty("smartWalletOptions", NullValueHandling = NullValueHandling.Ignore)]
         public SmartWalletOptions SmartWalletOptions;
 
+        [JsonProperty("reownOptions", NullValueHandling = NullValueHandling.Ignore)]
+        public ReownOptions ReownOptions;
+
         public WalletOptions(
             WalletProvider provider,
             BigInteger chainId,
             InAppWalletOptions inAppWalletOptions = null,
             EcosystemWalletOptions ecosystemWalletOptions = null,
-            SmartWalletOptions smartWalletOptions = null
+            SmartWalletOptions smartWalletOptions = null,
+            ReownOptions reownOptions = null
         )
         {
             Provider = provider;
@@ -192,6 +240,7 @@ namespace Thirdweb.Unity
             InAppWalletOptions = inAppWalletOptions ?? new InAppWalletOptions();
             SmartWalletOptions = smartWalletOptions;
             EcosystemWalletOptions = ecosystemWalletOptions;
+            ReownOptions = reownOptions ?? new ReownOptions();
         }
     }
 
@@ -215,12 +264,6 @@ namespace Thirdweb.Unity
         protected bool AutoConnectLastWallet { get; set; } = false;
 
         [field: SerializeField]
-        protected ulong[] SupportedChains { get; set; } = new ulong[] { 421614 };
-
-        [field: SerializeField]
-        protected string[] IncludedWalletIds { get; set; } = null;
-
-        [field: SerializeField]
         protected string RedirectPageHtmlOverride { get; set; } = null;
 
         [field: SerializeField]
@@ -238,9 +281,9 @@ namespace Thirdweb.Unity
 
         protected Dictionary<string, IThirdwebWallet> _walletMapping;
 
-        protected abstract ThirdwebClient CreateClient();
+        public abstract string MobileRedirectScheme { get; }
 
-        protected abstract string MobileRedirectScheme { get; }
+        protected abstract ThirdwebClient CreateClient();
 
         // ------------------------------------------------------
         // Lifecycle Methods
@@ -413,7 +456,18 @@ namespace Thirdweb.Unity
                     break;
 
                 case WalletProvider.ReownWallet:
-                    throw new NotSupportedException("ReownWallet is not yet supported!");
+                    wallet = await ReownWallet.Create(
+                        client: Client,
+                        activeChainId: walletOptions.ChainId,
+                        projectId: walletOptions.ReownOptions.ProjectId,
+                        name: walletOptions.ReownOptions.Name,
+                        description: walletOptions.ReownOptions.Description,
+                        url: walletOptions.ReownOptions.Url,
+                        iconUrl: walletOptions.ReownOptions.IconUrl,
+                        includedWalletIds: walletOptions.ReownOptions.IncludedWalletIds,
+                        excludedWalletIds: walletOptions.ReownOptions.ExcludedWalletIds
+                    );
+                    break;
 
                 case WalletProvider.MetaMaskWallet:
                     wallet = await MetaMaskWallet.Create(client: Client, activeChainId: walletOptions.ChainId);

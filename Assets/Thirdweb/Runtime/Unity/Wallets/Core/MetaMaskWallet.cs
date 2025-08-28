@@ -75,7 +75,7 @@ namespace Thirdweb.Unity
 
         public Task<string> EthSign(string message)
         {
-            throw new NotImplementedException("MetaMask does not support signing messages.");
+            throw new NotImplementedException("MetaMask does not support signing raw messages.");
         }
 
         public Task<string> GetAddress()
@@ -129,7 +129,7 @@ namespace Thirdweb.Unity
                             maxFeePerGas = transaction.MaxFeePerGas.HexValue,
                             maxPriorityFeePerGas = transaction.MaxPriorityFeePerGas?.HexValue ?? "0x0",
                             chainId = WebGLMetaMask.Instance.GetActiveChainId().NumberToHex(),
-                            type = "0x2"
+                            type = "0x2",
                         }
                         : new
                         {
@@ -141,9 +141,9 @@ namespace Thirdweb.Unity
                             data = transaction.Data,
                             gasPrice = transaction.GasPrice.HexValue,
                             chainId = WebGLMetaMask.Instance.GetActiveChainId().NumberToHex(),
-                            type = "0x0"
-                        }
-                }
+                            type = "0x0",
+                        },
+                },
             };
             return await WebGLMetaMask.Instance.RequestAsync<string>(rpcRequest);
         }
@@ -156,7 +156,7 @@ namespace Thirdweb.Unity
 
         public Task<string> SignTransaction(ThirdwebTransactionInput transaction)
         {
-            throw new NotImplementedException("Raw transaction signing is not supported.");
+            throw new NotImplementedException("MetaMask does not support raw transaction signing.");
         }
 
         public async Task<string> SignTypedDataV4(string json)
@@ -324,7 +324,7 @@ namespace Thirdweb.Unity
                 {
                     Name = "Ether",
                     Symbol = "ETH",
-                    Decimals = 18
+                    Decimals = 18,
                 };
 
             var addEthereumChainParameter = new AddEthereumChainParameter
