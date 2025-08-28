@@ -65,8 +65,8 @@ namespace Thirdweb.Unity.Examples
                     {
                         Decimals = 18,
                         Name = "ETH",
-                        Symbol = "ETH"
-                    }
+                        Symbol = "ETH",
+                    },
                 };
             }
         }
@@ -90,7 +90,7 @@ namespace Thirdweb.Unity.Examples
             WalletConnectButton.onClick.RemoveAllListeners();
             WalletConnectButton.onClick.AddListener(() =>
             {
-                var options = GetWalletOptions(WalletProvider.WalletConnectWallet);
+                var options = GetWalletOptions(WalletProvider.ReownWallet);
                 ConnectWallet(options);
             });
         }
@@ -99,7 +99,7 @@ namespace Thirdweb.Unity.Examples
         {
             // Connect the wallet
 
-            var internalWalletProvider = options.Provider == WalletProvider.MetaMaskWallet ? WalletProvider.WalletConnectWallet : options.Provider;
+            var internalWalletProvider = options.Provider == WalletProvider.MetaMaskWallet ? WalletProvider.ReownWallet : options.Provider;
             var currentPanel = WalletPanels.Find(panel => panel.Identifier == internalWalletProvider.ToString());
 
             Log(currentPanel.LogText, $"Connecting...");
@@ -156,9 +156,8 @@ namespace Thirdweb.Unity.Examples
                 case WalletProvider.EcosystemWallet:
                     var ecosystemWalletOptions = new EcosystemWalletOptions(ecosystemId: "ecosystem.the-bonfire", authprovider: AuthProvider.Google);
                     return new WalletOptions(provider: WalletProvider.EcosystemWallet, chainId: ActiveChainId, ecosystemWalletOptions: ecosystemWalletOptions);
-                case WalletProvider.WalletConnectWallet:
-                    var externalWalletProvider =
-                        Application.platform == RuntimePlatform.WebGLPlayer && WebglForceMetamaskExtension ? WalletProvider.MetaMaskWallet : WalletProvider.WalletConnectWallet;
+                case WalletProvider.ReownWallet:
+                    var externalWalletProvider = Application.platform == RuntimePlatform.WebGLPlayer && WebglForceMetamaskExtension ? WalletProvider.MetaMaskWallet : WalletProvider.ReownWallet;
                     return new WalletOptions(provider: externalWalletProvider, chainId: ActiveChainId);
                 default:
                     throw new System.NotImplementedException("Wallet provider not implemented for this example.");

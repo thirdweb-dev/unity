@@ -14,7 +14,7 @@ namespace Thirdweb.Unity
     {
         PrivateKeyWallet,
         InAppWallet,
-        WalletConnectWallet,
+        ReownWallet,
         MetaMaskWallet,
         EcosystemWallet,
     }
@@ -412,11 +412,8 @@ namespace Thirdweb.Unity
                     );
                     break;
 
-                case WalletProvider.WalletConnectWallet:
-                    var supportedChains = SupportedChains.Select(chain => new BigInteger(chain)).ToArray();
-                    var includedWalletIds = IncludedWalletIds == null || IncludedWalletIds.Length == 0 ? null : IncludedWalletIds;
-                    wallet = await WalletConnectWallet.Create(client: Client, initialChainId: walletOptions.ChainId, supportedChains: supportedChains, includedWalletIds: includedWalletIds);
-                    break;
+                case WalletProvider.ReownWallet:
+                    throw new NotSupportedException("ReownWallet is not yet supported!");
 
                 case WalletProvider.MetaMaskWallet:
                     wallet = await MetaMaskWallet.Create(client: Client, activeChainId: walletOptions.ChainId);
@@ -622,7 +619,7 @@ namespace Thirdweb.Unity
 
         protected virtual void SetAutoConnectOptions(WalletOptions walletOptions)
         {
-            if (AutoConnectLastWallet && walletOptions.Provider != WalletProvider.WalletConnectWallet)
+            if (AutoConnectLastWallet && walletOptions.Provider != WalletProvider.ReownWallet)
             {
                 try
                 {
