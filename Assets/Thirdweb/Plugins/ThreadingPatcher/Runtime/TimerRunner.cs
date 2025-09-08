@@ -30,8 +30,7 @@ namespace WebGLThreadingPatcher.Runtime
             var scheduler = timer.GetNestedType("Scheduler", BindingFlags.NonPublic);
 
             var timerSchedulerInstance = scheduler.GetProperty("Instance").GetValue(null);
-            _timerSchedulerLoop = (Func<int>)scheduler.GetMethod("RunSchedulerLoop", BindingFlags.Instance | BindingFlags.NonPublic)
-                .CreateDelegate(typeof(Func<int>), timerSchedulerInstance);
+            _timerSchedulerLoop = (Func<int>)scheduler.GetMethod("RunSchedulerLoop", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(Func<int>), timerSchedulerInstance);
         }
 
         [Preserve]

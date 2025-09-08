@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -102,18 +101,18 @@ namespace Thirdweb.Unity
             ExecutionMode executionMode = ExecutionMode.EOA
         )
         {
-            EcosystemId = ecosystemId;
-            EcosystemPartnerId = ecosystemPartnerId;
-            Email = email;
-            PhoneNumber = phoneNumber;
-            AuthProvider = authprovider;
-            JwtOrPayload = jwtOrPayload;
-            StorageDirectoryPath = storageDirectoryPath ?? Path.Combine(Application.persistentDataPath, "Thirdweb", "EcosystemWallet");
-            SiweSigner = siweSigner;
-            LegacyEncryptionKey = legacyEncryptionKey;
-            WalletSecret = walletSecret;
-            ForceSiweExternalWalletIds = forceSiweExternalWalletIds;
-            ExecutionMode = executionMode;
+            this.EcosystemId = ecosystemId;
+            this.EcosystemPartnerId = ecosystemPartnerId;
+            this.Email = email;
+            this.PhoneNumber = phoneNumber;
+            this.AuthProvider = authprovider;
+            this.JwtOrPayload = jwtOrPayload;
+            this.StorageDirectoryPath = storageDirectoryPath ?? Path.Combine(Application.persistentDataPath, "Thirdweb", "EcosystemWallet");
+            this.SiweSigner = siweSigner;
+            this.LegacyEncryptionKey = legacyEncryptionKey;
+            this.WalletSecret = walletSecret;
+            this.ForceSiweExternalWalletIds = forceSiweExternalWalletIds;
+            this.ExecutionMode = executionMode;
         }
     }
 
@@ -151,13 +150,13 @@ namespace Thirdweb.Unity
             TokenPaymaster tokenPaymaster = TokenPaymaster.NONE
         )
         {
-            SponsorGas = sponsorGas;
-            FactoryAddress = factoryAddress;
-            AccountAddressOverride = accountAddressOverride;
-            EntryPoint = entryPoint;
-            BundlerUrl = bundlerUrl;
-            PaymasterUrl = paymasterUrl;
-            TokenPaymaster = tokenPaymaster;
+            this.SponsorGas = sponsorGas;
+            this.FactoryAddress = factoryAddress;
+            this.AccountAddressOverride = accountAddressOverride;
+            this.EntryPoint = entryPoint;
+            this.BundlerUrl = bundlerUrl;
+            this.PaymasterUrl = paymasterUrl;
+            this.TokenPaymaster = tokenPaymaster;
         }
     }
 
@@ -195,13 +194,13 @@ namespace Thirdweb.Unity
             string[] excludedWalletIds = null
         )
         {
-            ProjectId = projectId ?? "35603765088f9ed24db818100fdbb6f9";
-            Name = name ?? "thirdweb";
-            Description = description ?? "thirdweb powered game";
-            Url = url ?? "https://thirdweb.com";
-            IconUrl = iconUrl ?? "https://thirdweb.com/favicon.ico";
-            IncludedWalletIds = includedWalletIds;
-            ExcludedWalletIds = excludedWalletIds;
+            this.ProjectId = projectId ?? "35603765088f9ed24db818100fdbb6f9";
+            this.Name = name ?? "thirdweb";
+            this.Description = description ?? "thirdweb powered game";
+            this.Url = url ?? "https://thirdweb.com";
+            this.IconUrl = iconUrl ?? "https://thirdweb.com/favicon.ico";
+            this.IncludedWalletIds = includedWalletIds;
+            this.ExcludedWalletIds = excludedWalletIds;
         }
     }
 
@@ -235,12 +234,12 @@ namespace Thirdweb.Unity
             ReownOptions reownOptions = null
         )
         {
-            Provider = provider;
-            ChainId = chainId;
-            InAppWalletOptions = inAppWalletOptions ?? new InAppWalletOptions();
-            SmartWalletOptions = smartWalletOptions;
-            EcosystemWalletOptions = ecosystemWalletOptions;
-            ReownOptions = reownOptions ?? new ReownOptions();
+            this.Provider = provider;
+            this.ChainId = chainId;
+            this.InAppWalletOptions = inAppWalletOptions ?? new InAppWalletOptions();
+            this.SmartWalletOptions = smartWalletOptions;
+            this.EcosystemWalletOptions = ecosystemWalletOptions;
+            this.ReownOptions = reownOptions ?? new ReownOptions();
         }
     }
 
@@ -279,7 +278,7 @@ namespace Thirdweb.Unity
 
         protected const string THIRDWEB_AUTO_CONNECT_OPTIONS_KEY = "ThirdwebAutoConnectOptions";
 
-        protected Dictionary<string, IThirdwebWallet> _walletMapping;
+        protected Dictionary<string, IThirdwebWallet> WalletMapping;
 
         public abstract string MobileRedirectScheme { get; }
 
@@ -294,26 +293,26 @@ namespace Thirdweb.Unity
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(this.gameObject);
             }
             else
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
                 return;
             }
 
-            ThirdwebDebug.IsEnabled = ShowDebugLogs;
+            ThirdwebDebug.IsEnabled = this.ShowDebugLogs;
 
-            if (InitializeOnAwake)
+            if (this.InitializeOnAwake)
             {
-                Initialize();
+                this.Initialize();
             }
         }
 
         public virtual async void Initialize()
         {
-            Client = CreateClient();
-            if (Client == null)
+            this.Client = this.CreateClient();
+            if (this.Client == null)
             {
                 ThirdwebDebug.LogError("Failed to initialize ThirdwebManager.");
                 return;
@@ -321,14 +320,14 @@ namespace Thirdweb.Unity
 
             ThirdwebDebug.Log("ThirdwebManager initialized.");
 
-            _walletMapping = new Dictionary<string, IThirdwebWallet>();
+            this.WalletMapping = new Dictionary<string, IThirdwebWallet>();
 
-            if (AutoConnectLastWallet && GetAutoConnectOptions(out var lastWalletOptions))
+            if (this.AutoConnectLastWallet && this.GetAutoConnectOptions(out var lastWalletOptions))
             {
                 ThirdwebDebug.Log("Auto-connecting to last wallet.");
                 try
                 {
-                    _ = await ConnectWallet(lastWalletOptions);
+                    _ = await this.ConnectWallet(lastWalletOptions);
                     ThirdwebDebug.Log("Auto-connected to last wallet.");
                 }
                 catch (Exception e)
@@ -337,7 +336,7 @@ namespace Thirdweb.Unity
                 }
             }
 
-            Initialized = true;
+            this.Initialized = true;
         }
 
         // ------------------------------------------------------
@@ -346,12 +345,12 @@ namespace Thirdweb.Unity
 
         public virtual async Task<ThirdwebContract> GetContract(string address, BigInteger chainId, string abi = null)
         {
-            if (!Initialized)
+            if (!this.Initialized)
             {
                 throw new InvalidOperationException("ThirdwebManager is not initialized.");
             }
 
-            return await ThirdwebContract.Create(Client, address, chainId, abi);
+            return await ThirdwebContract.Create(this.Client, address, chainId, abi);
         }
 
         // ------------------------------------------------------
@@ -360,17 +359,17 @@ namespace Thirdweb.Unity
 
         public virtual IThirdwebWallet GetActiveWallet()
         {
-            return ActiveWallet;
+            return this.ActiveWallet;
         }
 
         public virtual void SetActiveWallet(IThirdwebWallet wallet)
         {
-            ActiveWallet = wallet;
+            this.ActiveWallet = wallet;
         }
 
         public virtual IThirdwebWallet GetWallet(string address)
         {
-            if (_walletMapping.TryGetValue(address, out var wallet))
+            if (this.WalletMapping.TryGetValue(address, out var wallet))
             {
                 return wallet;
             }
@@ -381,15 +380,15 @@ namespace Thirdweb.Unity
         public virtual async Task<IThirdwebWallet> AddWallet(IThirdwebWallet wallet)
         {
             var address = await wallet.GetAddress();
-            _walletMapping.TryAdd(address, wallet);
+            _ = this.WalletMapping.TryAdd(address, wallet);
             return wallet;
         }
 
         public virtual void RemoveWallet(string address)
         {
-            if (_walletMapping.ContainsKey(address))
+            if (this.WalletMapping.ContainsKey(address))
             {
-                _walletMapping.Remove(address, out var _);
+                _ = this.WalletMapping.Remove(address, out _);
             }
         }
 
@@ -414,12 +413,11 @@ namespace Thirdweb.Unity
             switch (walletOptions.Provider)
             {
                 case WalletProvider.PrivateKeyWallet:
-                    wallet = await PrivateKeyWallet.Generate(client: Client);
+                    wallet = await PrivateKeyWallet.Generate(client: this.Client);
                     break;
-
                 case WalletProvider.InAppWallet:
                     wallet = await InAppWallet.Create(
-                        client: Client,
+                        client: this.Client,
                         email: walletOptions.InAppWalletOptions.Email,
                         phoneNumber: walletOptions.InAppWalletOptions.PhoneNumber,
                         authProvider: walletOptions.InAppWalletOptions.AuthProvider,
@@ -430,7 +428,6 @@ namespace Thirdweb.Unity
                         executionMode: walletOptions.InAppWalletOptions.ExecutionMode
                     );
                     break;
-
                 case WalletProvider.EcosystemWallet:
                     if (walletOptions.EcosystemWalletOptions == null)
                     {
@@ -441,7 +438,7 @@ namespace Thirdweb.Unity
                         throw new ArgumentException("EcosystemId must be provided for EcosystemWallet provider.");
                     }
                     wallet = await EcosystemWallet.Create(
-                        client: Client,
+                        client: this.Client,
                         ecosystemId: walletOptions.EcosystemWalletOptions.EcosystemId,
                         ecosystemPartnerId: walletOptions.EcosystemWalletOptions.EcosystemPartnerId,
                         email: walletOptions.EcosystemWalletOptions.Email,
@@ -454,10 +451,9 @@ namespace Thirdweb.Unity
                         executionMode: walletOptions.EcosystemWalletOptions.ExecutionMode
                     );
                     break;
-
                 case WalletProvider.ReownWallet:
                     wallet = await ReownWallet.Create(
-                        client: Client,
+                        client: this.Client,
                         activeChainId: walletOptions.ChainId,
                         projectId: walletOptions.ReownOptions.ProjectId,
                         name: walletOptions.ReownOptions.Name,
@@ -468,10 +464,11 @@ namespace Thirdweb.Unity
                         excludedWalletIds: walletOptions.ReownOptions.ExcludedWalletIds
                     );
                     break;
-
                 case WalletProvider.MetaMaskWallet:
-                    wallet = await MetaMaskWallet.Create(client: Client, activeChainId: walletOptions.ChainId);
+                    wallet = await MetaMaskWallet.Create(client: this.Client, activeChainId: walletOptions.ChainId);
                     break;
+                default:
+                    throw new NotSupportedException($"Wallet provider {walletOptions.Provider} is not supported.");
             }
 
             // InAppWallet auth flow
@@ -508,16 +505,29 @@ namespace Thirdweb.Unity
                             forceWalletIds: walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds.Count == 0
                                 ? null
                                 : walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds,
-                            mobileRedirectScheme: MobileRedirectScheme,
-                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                            mobileRedirectScheme: this.MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(this.RedirectPageHtmlOverride)
                         );
                         break;
+                    case AuthProvider.Google:
+                    case AuthProvider.Apple:
+                    case AuthProvider.Facebook:
+                    case AuthProvider.Discord:
+                    case AuthProvider.Farcaster:
+                    case AuthProvider.Telegram:
+                    case AuthProvider.Line:
+                    case AuthProvider.X:
+                    case AuthProvider.TikTok:
+                    case AuthProvider.Coinbase:
+                    case AuthProvider.Github:
+                    case AuthProvider.Twitch:
+                    case AuthProvider.Steam:
                     default:
                         _ = await inAppWallet.LoginWithOauth(
                             isMobile: Application.isMobilePlatform,
                             browserOpenAction: (url) => Application.OpenURL(url),
-                            mobileRedirectScheme: MobileRedirectScheme,
-                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                            mobileRedirectScheme: this.MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(this.RedirectPageHtmlOverride)
                         );
                         break;
                 }
@@ -557,16 +567,29 @@ namespace Thirdweb.Unity
                             forceWalletIds: walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds.Count == 0
                                 ? null
                                 : walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds,
-                            mobileRedirectScheme: MobileRedirectScheme,
-                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                            mobileRedirectScheme: this.MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(this.RedirectPageHtmlOverride)
                         );
                         break;
+                    case AuthProvider.Google:
+                    case AuthProvider.Apple:
+                    case AuthProvider.Facebook:
+                    case AuthProvider.Discord:
+                    case AuthProvider.Farcaster:
+                    case AuthProvider.Telegram:
+                    case AuthProvider.Line:
+                    case AuthProvider.X:
+                    case AuthProvider.TikTok:
+                    case AuthProvider.Coinbase:
+                    case AuthProvider.Github:
+                    case AuthProvider.Twitch:
+                    case AuthProvider.Steam:
                     default:
                         _ = await ecosystemWallet.LoginWithOauth(
                             isMobile: Application.isMobilePlatform,
                             browserOpenAction: (url) => Application.OpenURL(url),
-                            mobileRedirectScheme: MobileRedirectScheme,
-                            browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
+                            mobileRedirectScheme: this.MobileRedirectScheme,
+                            browser: new CrossPlatformUnityBrowser(this.RedirectPageHtmlOverride)
                         );
                         break;
                 }
@@ -575,18 +598,18 @@ namespace Thirdweb.Unity
             var address = await wallet.GetAddress();
             var isSmartWallet = walletOptions.SmartWalletOptions != null;
 
-            SetAutoConnectOptions(walletOptions);
+            this.SetAutoConnectOptions(walletOptions);
 
             // If SmartWallet, do upgrade
             if (isSmartWallet)
             {
                 ThirdwebDebug.Log("Upgrading to SmartWallet.");
-                return await UpgradeToSmartWallet(wallet, walletOptions.ChainId, walletOptions.SmartWalletOptions);
+                return await this.UpgradeToSmartWallet(wallet, walletOptions.ChainId, walletOptions.SmartWalletOptions);
             }
             else
             {
-                await AddWallet(wallet);
-                SetActiveWallet(wallet);
+                _ = await this.AddWallet(wallet);
+                this.SetActiveWallet(wallet);
                 return wallet;
             }
         }
@@ -621,14 +644,14 @@ namespace Thirdweb.Unity
                 tokenPaymaster: smartWalletOptions.TokenPaymaster
             );
 
-            await AddWallet(wallet);
-            SetActiveWallet(wallet);
+            _ = await this.AddWallet(wallet);
+            this.SetActiveWallet(wallet);
 
             // Persist "smartWalletOptions" to auto-connect
-            if (AutoConnectLastWallet && GetAutoConnectOptions(out var lastWalletOptions))
+            if (this.AutoConnectLastWallet && this.GetAutoConnectOptions(out var lastWalletOptions))
             {
                 lastWalletOptions.SmartWalletOptions = smartWalletOptions;
-                SetAutoConnectOptions(lastWalletOptions);
+                this.SetAutoConnectOptions(lastWalletOptions);
             }
 
             return wallet;
@@ -641,8 +664,8 @@ namespace Thirdweb.Unity
                 otp: otp,
                 isMobile: Application.isMobilePlatform,
                 browserOpenAction: (url) => Application.OpenURL(url),
-                mobileRedirectScheme: MobileRedirectScheme,
-                browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride),
+                mobileRedirectScheme: this.MobileRedirectScheme,
+                browser: new CrossPlatformUnityBrowser(this.RedirectPageHtmlOverride),
                 chainId: chainId,
                 jwt: jwtOrPayload,
                 payload: jwtOrPayload
@@ -673,7 +696,7 @@ namespace Thirdweb.Unity
 
         protected virtual void SetAutoConnectOptions(WalletOptions walletOptions)
         {
-            if (AutoConnectLastWallet && walletOptions.Provider != WalletProvider.ReownWallet)
+            if (this.AutoConnectLastWallet && walletOptions.Provider != WalletProvider.ReownWallet)
             {
                 try
                 {

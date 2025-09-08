@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ZXing;
 using ZXing.QrCode;
-
 #if UNITY_WEBGL
 using System.Runtime.InteropServices;
 #endif
@@ -69,14 +68,14 @@ namespace Thirdweb.Unity
                 Height = height,
                 Width = width,
                 Margin = 4,
-                QrVersion = 11
+                QrVersion = 11,
             };
 
             var writer = new BarcodeWriter
             {
                 Format = BarcodeFormat.QR_CODE,
                 Options = qrCodeEncodingOptions,
-                Renderer = new Color32Renderer { Foreground = fgColor.Value, Background = bgColor.Value }
+                Renderer = new Color32Renderer { Foreground = fgColor.Value, Background = bgColor.Value },
             };
 
             var pixels = writer.Write(textForEncoding);

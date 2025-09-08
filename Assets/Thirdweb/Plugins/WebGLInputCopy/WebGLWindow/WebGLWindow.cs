@@ -1,6 +1,6 @@
 ﻿using System;
-using AOT;
 using System.Runtime.InteropServices; // for DllImport
+using AOT;
 using UnityEngine;
 
 namespace WebGLSupport
@@ -10,6 +10,7 @@ namespace WebGLSupport
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")]
         public static extern void WebGLWindowInit();
+
         [DllImport("__Internal")]
         public static extern void WebGLWindowOnFocus(Action cb);
 
@@ -35,16 +36,29 @@ namespace WebGLSupport
         public static extern bool IsFullscreen();
 #else
         public static void WebGLWindowInit() { }
-        public static void WebGLWindowOnFocus(Action cb) { }
-        public static void WebGLWindowOnBlur(Action cb) { }
-        public static void WebGLWindowOnResize(Action cb) { }
-        public static void WebGLWindowInjectFullscreen() { }
-        public static string WebGLWindowGetCanvasName() { return ""; }
-        public static void MakeFullscreen(string str) { }
-        public static void ExitFullscreen() { }
-        public static bool IsFullscreen() { return false; }
-#endif
 
+        public static void WebGLWindowOnFocus(Action cb) { }
+
+        public static void WebGLWindowOnBlur(Action cb) { }
+
+        public static void WebGLWindowOnResize(Action cb) { }
+
+        public static void WebGLWindowInjectFullscreen() { }
+
+        public static string WebGLWindowGetCanvasName()
+        {
+            return "";
+        }
+
+        public static void MakeFullscreen(string str) { }
+
+        public static void ExitFullscreen() { }
+
+        public static bool IsFullscreen()
+        {
+            return false;
+        }
+#endif
     }
 
     public static class WebGLWindow
@@ -53,12 +67,14 @@ namespace WebGLSupport
         {
             WebGLWindowPlugin.WebGLWindowInit();
         }
+
         public static bool Focus { get; private set; }
         public static event Action OnFocusEvent = () => { };
         public static event Action OnBlurEvent = () => { };
         public static event Action OnResizeEvent = () => { };
 
         static string ViewportContent;
+
         static void Init()
         {
             Focus = true;
@@ -108,10 +124,12 @@ namespace WebGLSupport
         {
             WebGLWindowPlugin.ExitFullscreen();
         }
+
         public static bool IsFullscreen()
         {
             return WebGLWindowPlugin.IsFullscreen();
         }
+
         public static void SwitchFullscreen()
         {
             if (IsFullscreen())

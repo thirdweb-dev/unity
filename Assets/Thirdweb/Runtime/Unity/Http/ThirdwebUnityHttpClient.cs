@@ -64,7 +64,7 @@ namespace Thirdweb.Unity.Helpers
                         var webRequest = new UnityWebRequest(requestUri, UnityWebRequest.kHttpVerbPOST)
                         {
                             uploadHandler = new UploadHandlerRaw(contentBytes) { contentType = content.Headers.ContentType.ToString() },
-                            downloadHandler = new DownloadHandlerBuffer()
+                            downloadHandler = new DownloadHandlerBuffer(),
                         };
                         return webRequest;
                     },

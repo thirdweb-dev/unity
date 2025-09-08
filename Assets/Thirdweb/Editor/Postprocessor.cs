@@ -24,12 +24,16 @@ namespace WebGLSupport
         [PostProcessBuild(1)]
         public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
         {
-            if (target != BuildTarget.WebGL) return;
-            if (!supportedPostprocessor) return;
-            if (!IsEnable) return;
+            if (target != BuildTarget.WebGL)
+                return;
+            if (!supportedPostprocessor)
+                return;
+            if (!IsEnable)
+                return;
 
             var path = Path.Combine(pathToBuiltProject, "index.html");
-            if (!File.Exists(path)) return;
+            if (!File.Exists(path))
+                return;
 
             var html = File.ReadAllText(path);
 

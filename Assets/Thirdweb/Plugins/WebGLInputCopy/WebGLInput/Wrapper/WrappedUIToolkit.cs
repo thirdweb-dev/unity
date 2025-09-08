@@ -10,7 +10,10 @@ namespace WebGLSupport
     {
         TextField input;
 
-        public bool ReadOnly { get { return input.isReadOnly; } }
+        public bool ReadOnly
+        {
+            get { return input.isReadOnly; }
+        }
 
         public string text
         {
@@ -72,10 +75,7 @@ namespace WebGLSupport
 
         public LineType lineType
         {
-            get
-            {
-                return input.multiline ? LineType.MultiLineNewline : LineType.SingleLine;
-            }
+            get { return input.multiline ? LineType.MultiLineNewline : LineType.SingleLine; }
         }
 
         public int characterLimit
@@ -90,10 +90,7 @@ namespace WebGLSupport
 
         public bool isFocused
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public int selectionFocusPosition
@@ -146,17 +143,13 @@ namespace WebGLSupport
             return new Rect(rect.x, Screen.height - (rect.y + rect.height), rect.width, rect.height);
         }
 
-        public void ActivateInputField()
-        {
-        }
+        public void ActivateInputField() { }
 
         public void DeactivateInputField()
         {
             input.Blur();
         }
 
-        public void Rebuild()
-        {
-        }
+        public void Rebuild() { }
     }
 }

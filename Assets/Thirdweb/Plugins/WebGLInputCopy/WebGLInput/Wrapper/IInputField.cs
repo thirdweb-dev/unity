@@ -13,14 +13,16 @@ namespace WebGLSupport
         EmailAddress = 6,
         Password = 7,
         Pin = 8,
-        Custom = 9
+        Custom = 9,
     }
+
     public enum LineType
     {
         SingleLine = 0,
         MultiLineSubmit = 1,
-        MultiLineNewline = 2
+        MultiLineNewline = 2,
     }
+
     public interface IInputField
     {
         ContentType contentType { get; }

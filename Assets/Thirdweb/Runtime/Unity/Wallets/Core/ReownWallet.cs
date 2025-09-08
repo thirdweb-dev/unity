@@ -149,8 +149,8 @@ namespace Thirdweb.Unity
 
         public Task<string> PersonalSign(string message)
         {
-            byte[] rawMessage = System.Text.Encoding.UTF8.GetBytes("Hello World");
-            return PersonalSign(rawMessage);
+            var rawMessage = System.Text.Encoding.UTF8.GetBytes(message);
+            return this.PersonalSign(rawMessage);
         }
 
         public Task<string> RecoverAddressFromPersonalSign(string message, string signature)
@@ -184,7 +184,7 @@ namespace Thirdweb.Unity
             }
 
             var safeJson = Utils.ToJsonExternalWalletFriendly(typedData, data);
-            return SignTypedDataV4(safeJson);
+            return this.SignTypedDataV4(safeJson);
         }
 
         public Task<string> RecoverAddressFromTypedDataV4<T, TDomain>(T data, TypedData<TDomain> typedData, string signature)
@@ -210,8 +210,8 @@ namespace Thirdweb.Unity
 
         public async Task<ThirdwebTransactionReceipt> ExecuteTransaction(ThirdwebTransactionInput transaction)
         {
-            var hash = await SendTransaction(transaction);
-            return await ThirdwebTransaction.WaitForTransactionReceipt(Client, ActiveChainId, hash);
+            var hash = await this.SendTransaction(transaction);
+            return await ThirdwebTransaction.WaitForTransactionReceipt(this.Client, ActiveChainId, hash);
         }
 
         public Task Disconnect()
@@ -254,7 +254,7 @@ namespace Thirdweb.Unity
 
         public async Task SwitchNetwork(BigInteger chainId)
         {
-            await AppKit.NetworkController.ChangeActiveChainAsync(ToWcChain(Client, chainId));
+            await AppKit.NetworkController.ChangeActiveChainAsync(ToWcChain(this.Client, chainId));
             ThirdwebDebug.Log($"Switched Reown to chain ID {chainId}.");
         }
 

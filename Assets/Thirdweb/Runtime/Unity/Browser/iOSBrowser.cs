@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AOT;
-
 using System.Runtime.InteropServices;
 
 namespace Thirdweb.Unity
@@ -152,7 +151,7 @@ namespace Thirdweb.Unity
         None = 0,
         CanceledLogin = 1,
         PresentationContextNotProvided = 2,
-        PresentationContextInvalid = 3
+        PresentationContextInvalid = 3,
     }
 }
 

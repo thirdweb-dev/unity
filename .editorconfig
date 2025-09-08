@@ -164,3 +164,6 @@ dotnet_diagnostic.JSON002.severity = silent
 
 # CS8981: The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
 dotnet_diagnostic.CS8981.severity = suggestion
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = silent

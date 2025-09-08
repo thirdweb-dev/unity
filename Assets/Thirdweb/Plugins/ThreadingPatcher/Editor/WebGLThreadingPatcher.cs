@@ -1,7 +1,7 @@
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using System.IO;
 using System.Linq;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -805,7 +805,7 @@ namespace WebGLThreadingPatcher.Editor
         {
             var type = new TypeDefinition("AOT", "MonoPInvokeCallbackAttribute", TypeAttributes.AnsiClass | TypeAttributes.AutoClass | TypeAttributes.BeforeFieldInit | TypeAttributes.Public)
             {
-                BaseType = moduleDefinition.ImportReference(moduleDefinition.Types.First(t => t.FullName == "System.Attribute"))
+                BaseType = moduleDefinition.ImportReference(moduleDefinition.Types.First(t => t.FullName == "System.Attribute")),
             };
             var ctor = new MethodDefinition(
                 ".ctor",

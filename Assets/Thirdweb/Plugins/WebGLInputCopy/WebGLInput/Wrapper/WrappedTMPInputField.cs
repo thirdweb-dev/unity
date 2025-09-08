@@ -20,7 +20,10 @@ namespace WebGLSupport
         RebuildChecker checker;
         Coroutine delayedGraphicRebuild;
 
-        public bool ReadOnly { get { return input.readOnly; } }
+        public bool ReadOnly
+        {
+            get { return input.readOnly; }
+        }
 
         public string text
         {
@@ -56,7 +59,8 @@ namespace WebGLSupport
         {
             get
             {
-                if (!input.placeholder) return "";
+                if (!input.placeholder)
+                    return "";
                 var text = input.placeholder.GetComponent<TMP_Text>();
                 return text ? text.text : "";
             }
@@ -140,8 +144,6 @@ namespace WebGLSupport
             //  表示範囲外になる場合があるので、自分の範囲を返す
             return Support.GetScreenCoordinates(input.GetComponent<RectTransform>());
         }
-
-
 
         public void ActivateInputField()
         {

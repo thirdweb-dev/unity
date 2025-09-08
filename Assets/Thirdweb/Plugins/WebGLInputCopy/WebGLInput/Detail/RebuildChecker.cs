@@ -12,6 +12,7 @@ namespace WebGLSupport.Detail
         int beforeCaretPosition;
         int beforeSelectionFocusPosition;
         int beforeSelectionAnchorPosition;
+
         //Vector2 anchoredPosition;
 
         public RebuildChecker(IInputField input)
@@ -26,28 +27,32 @@ namespace WebGLSupport.Detail
             // any not same
             if (beforeString != input.text)
             {
-                if(debug) Debug.Log(string.Format("beforeString : {0} != {1}", beforeString, input.text));
+                if (debug)
+                    Debug.Log(string.Format("beforeString : {0} != {1}", beforeString, input.text));
                 beforeString = input.text;
                 res = true;
             }
 
             if (beforeCaretPosition != input.caretPosition)
             {
-                if (debug) Debug.Log(string.Format("beforeCaretPosition : {0} != {1}", beforeCaretPosition, input.caretPosition));
+                if (debug)
+                    Debug.Log(string.Format("beforeCaretPosition : {0} != {1}", beforeCaretPosition, input.caretPosition));
                 beforeCaretPosition = input.caretPosition;
                 res = true;
             }
 
             if (beforeSelectionFocusPosition != input.selectionFocusPosition)
             {
-                if (debug) Debug.Log(string.Format("beforeSelectionFocusPosition : {0} != {1}", beforeSelectionFocusPosition, input.selectionFocusPosition));
+                if (debug)
+                    Debug.Log(string.Format("beforeSelectionFocusPosition : {0} != {1}", beforeSelectionFocusPosition, input.selectionFocusPosition));
                 beforeSelectionFocusPosition = input.selectionFocusPosition;
                 res = true;
             }
 
             if (beforeSelectionAnchorPosition != input.selectionAnchorPosition)
             {
-                if (debug) Debug.Log(string.Format("beforeSelectionAnchorPosition : {0} != {1}", beforeSelectionAnchorPosition, input.selectionAnchorPosition));
+                if (debug)
+                    Debug.Log(string.Format("beforeSelectionAnchorPosition : {0} != {1}", beforeSelectionAnchorPosition, input.selectionAnchorPosition));
                 beforeSelectionAnchorPosition = input.selectionAnchorPosition;
                 res = true;
             }

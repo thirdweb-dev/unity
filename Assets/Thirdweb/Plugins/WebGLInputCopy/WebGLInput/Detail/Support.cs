@@ -20,7 +20,8 @@ namespace WebGLSupport.Detail
             if (canvas && useCamera)
             {
                 var camera = canvas.worldCamera;
-                if (!camera) camera = Camera.main;
+                if (!camera)
+                    camera = Camera.main;
 
                 for (var i = 0; i < worldCorners.Length; i++)
                 {
@@ -40,6 +41,5 @@ namespace WebGLSupport.Detail
 
             return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
         }
-
     }
 }

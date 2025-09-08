@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thirdweb.unity"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <application>
-        <activity android:name="com.unity3d.player.UnityPlayerActivity"
-            android:theme="@style/UnityThemeSelector">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Set your bundle id here -->
-                <!-- Replace 'com.thirdweb.unitysdk' with your desired scheme -->
-                <data android:scheme="com.thirdweb.unitysdk" />
-            </intent-filter>
-
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-        </activity>
-    </application>
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.thirdweb.unity"
+  xmlns:tools="http://schemas.android.com/tools"
+>
+  <application>
+    <activity
+      android:name="com.unity3d.player.UnityPlayerActivity"
+      android:theme="@style/UnityThemeSelector"
+    >
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <!-- Set your bundle id here -->
+        <!-- Replace 'com.thirdweb.unitysdk' with your desired scheme -->
+        <data android:scheme="com.thirdweb.unitysdk" />
+      </intent-filter>
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+    </activity>
+  </application>
 </manifest>

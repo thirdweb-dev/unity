@@ -12,6 +12,7 @@ namespace WebGLSupport
         {
             this.showHtmlElement = showHtmlElement;
         }
+
         protected override void RegisterCallbacksOnTarget()
         {
             // uitoolkit is already support mobile.
@@ -22,6 +23,7 @@ namespace WebGLSupport
                 textInput.RegisterCallback<FocusOutEvent>(OnFocusOutEvent);
             }
         }
+
         protected override void UnregisterCallbacksFromTarget()
         {
             // uitoolkit is already support mobile.
