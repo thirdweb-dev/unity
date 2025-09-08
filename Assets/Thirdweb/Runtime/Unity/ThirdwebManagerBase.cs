@@ -696,7 +696,7 @@ namespace Thirdweb.Unity
 
         protected virtual void SetAutoConnectOptions(WalletOptions walletOptions)
         {
-            if (this.AutoConnectLastWallet && walletOptions.Provider != WalletProvider.ReownWallet)
+            if (this.AutoConnectLastWallet)
             {
                 try
                 {
