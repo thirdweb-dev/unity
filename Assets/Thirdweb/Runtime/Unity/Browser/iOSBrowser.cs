@@ -1,12 +1,11 @@
-#if UNITY_IOS && !UNITY_EDITOR
+#if (UNITY_IOS || UNITY_STANDALONE_OSX) && !UNITY_EDITOR
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AOT;
-
-using System.Runtime.InteropServices;
 
 namespace Thirdweb.Unity
 {
@@ -26,7 +25,12 @@ namespace Thirdweb.Unity
         {
             _sessionPtr = Thirdweb_ASWebAuthenticationSession_InitWithURL(url, callbackUrlScheme, OnAuthenticationSessionCompleted);
 
-            CompletionCallbacks.Add(_sessionPtr, completionHandler);
+            if (_sessionPtr == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Failed to initialize ASWebAuthenticationSession.");
+            }
+
+            CompletionCallbacks[_sessionPtr] = completionHandler;
         }
 
         public bool Start()
@@ -41,11 +45,18 @@ namespace Thirdweb.Unity
 
         public void Dispose()
         {
-            CompletionCallbacks.Remove(_sessionPtr);
+            if (_sessionPtr != IntPtr.Zero)
+            {
+                CompletionCallbacks.Remove(_sessionPtr);
+            }
             _sessionPtr = IntPtr.Zero;
         }
 
+#if UNITY_STANDALONE_OSX
+        private const string DllName = "MacBrowser";
+#else
         private const string DllName = "__Internal";
+#endif
 
         [DllImport(DllName)]
         private static extern IntPtr Thirdweb_ASWebAuthenticationSession_InitWithURL(string url, string callbackUrlScheme, AuthenticationSessionCompletedCallback completionHandler);
@@ -76,6 +87,7 @@ namespace Thirdweb.Unity
         }
     }
 
+#if UNITY_IOS
     public class IOSBrowser : IThirdwebBrowser
     {
         private TaskCompletionSource<BrowserResult> _taskCompletionSource;
@@ -134,6 +146,68 @@ namespace Thirdweb.Unity
             }
         }
     }
+#endif
+
+#if UNITY_STANDALONE_OSX
+    public class MacBrowser : IThirdwebBrowser
+    {
+        private TaskCompletionSource<BrowserResult> _taskCompletionSource;
+
+        public bool prefersEphemeralWebBrowserSession { get; set; } = false;
+
+        public async Task<BrowserResult> Login(ThirdwebClient client, string loginUrl, string redirectUrl, Action<string> browserOpenAction, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(loginUrl))
+                throw new ArgumentNullException(nameof(loginUrl));
+
+            if (string.IsNullOrEmpty(redirectUrl))
+                throw new ArgumentNullException(nameof(redirectUrl));
+
+            _taskCompletionSource = new TaskCompletionSource<BrowserResult>();
+
+            redirectUrl = redirectUrl.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries)[0];
+
+            using var authenticationSession = new ASWebAuthenticationSession(loginUrl, redirectUrl, AuthenticationSessionCompletionHandler);
+            authenticationSession.prefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession;
+
+            cancellationToken.Register(() =>
+            {
+                _taskCompletionSource?.TrySetCanceled();
+            });
+
+            try
+            {
+                if (!authenticationSession.Start())
+                {
+                    _taskCompletionSource.SetResult(new BrowserResult(BrowserStatus.UnknownError, "Browser could not be started."));
+                }
+
+                return await _taskCompletionSource.Task;
+            }
+            catch (TaskCanceledException)
+            {
+                authenticationSession?.Cancel();
+                throw;
+            }
+        }
+
+        private void AuthenticationSessionCompletionHandler(string callbackUrl, ASWebAuthenticationSessionError error)
+        {
+            if (error.code == ASWebAuthenticationSessionErrorCode.None)
+            {
+                _taskCompletionSource.SetResult(new BrowserResult(BrowserStatus.Success, callbackUrl));
+            }
+            else if (error.code == ASWebAuthenticationSessionErrorCode.CanceledLogin)
+            {
+                _taskCompletionSource.SetResult(new BrowserResult(BrowserStatus.UserCanceled, callbackUrl, error.message));
+            }
+            else
+            {
+                _taskCompletionSource.SetResult(new BrowserResult(BrowserStatus.UnknownError, callbackUrl, error.message));
+            }
+        }
+    }
+#endif
 
     public class ASWebAuthenticationSessionError
     {

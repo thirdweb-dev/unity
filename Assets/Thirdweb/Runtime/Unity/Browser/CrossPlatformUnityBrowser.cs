@@ -37,6 +37,8 @@ namespace Thirdweb.Unity
             _unityBrowser = new AndroidBrowser();
 #elif UNITY_IOS
             _unityBrowser = new IOSBrowser();
+#elif UNITY_STANDALONE_OSX
+            _unityBrowser = new MacBrowser();
 #else
             _unityBrowser = new InAppWalletBrowser(htmlOverride);
 #endif

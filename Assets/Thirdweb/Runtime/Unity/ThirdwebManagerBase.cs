@@ -452,7 +452,7 @@ namespace Thirdweb.Unity
                         break;
                     case AuthProvider.SiweExternal:
                         _ = await inAppWallet.LoginWithSiweExternal(
-                            isMobile: Application.isMobilePlatform,
+                            isMobile: IsMobileRuntime(),
                             browserOpenAction: (url) => Application.OpenURL(url),
                             forceWalletIds: walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.InAppWalletOptions.ForceSiweExternalWalletIds.Count == 0
                                 ? null
@@ -463,7 +463,7 @@ namespace Thirdweb.Unity
                         break;
                     default:
                         _ = await inAppWallet.LoginWithOauth(
-                            isMobile: Application.isMobilePlatform,
+                            isMobile: IsMobileRuntime(),
                             browserOpenAction: (url) => Application.OpenURL(url),
                             mobileRedirectScheme: MobileRedirectScheme,
                             browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
@@ -501,7 +501,7 @@ namespace Thirdweb.Unity
                         break;
                     case AuthProvider.SiweExternal:
                         _ = await ecosystemWallet.LoginWithSiweExternal(
-                            isMobile: Application.isMobilePlatform,
+                            isMobile: IsMobileRuntime(),
                             browserOpenAction: (url) => Application.OpenURL(url),
                             forceWalletIds: walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds == null || walletOptions.EcosystemWalletOptions.ForceSiweExternalWalletIds.Count == 0
                                 ? null
@@ -512,7 +512,7 @@ namespace Thirdweb.Unity
                         break;
                     default:
                         _ = await ecosystemWallet.LoginWithOauth(
-                            isMobile: Application.isMobilePlatform,
+                            isMobile: IsMobileRuntime(),
                             browserOpenAction: (url) => Application.OpenURL(url),
                             mobileRedirectScheme: MobileRedirectScheme,
                             browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride)
@@ -588,7 +588,7 @@ namespace Thirdweb.Unity
             return await mainWallet.LinkAccount(
                 walletToLink: walletToLink,
                 otp: otp,
-                isMobile: Application.isMobilePlatform,
+                isMobile: IsMobileRuntime(),
                 browserOpenAction: (url) => Application.OpenURL(url),
                 mobileRedirectScheme: MobileRedirectScheme,
                 browser: new CrossPlatformUnityBrowser(RedirectPageHtmlOverride),
@@ -596,6 +596,16 @@ namespace Thirdweb.Unity
                 jwt: jwtOrPayload,
                 payload: jwtOrPayload
             );
+        }
+
+        protected virtual bool IsMobileRuntime()
+        {
+            if (Application.platform == RuntimePlatform.OSXPlayer)
+            {
+                return true;
+            }
+
+            return Application.isMobilePlatform;
         }
 
         protected virtual bool GetAutoConnectOptions(out WalletOptions lastWalletOptions)
