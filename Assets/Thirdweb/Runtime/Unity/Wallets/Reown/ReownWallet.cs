@@ -47,7 +47,7 @@ namespace Thirdweb.Unity
             else
             {
                 ThirdwebDebug.Log($"The chain with ID {activeChainId} is not supported by Reown. Adding it manually.");
-                wcChains.Add(ToWcChain(client, activeChainId));
+                wcChains.Add(await ToWcChainAsync(client, activeChainId));
             }
 
             var appKitConfig = new AppKitConfig
@@ -258,11 +258,12 @@ namespace Thirdweb.Unity
 
         public async Task SwitchNetwork(BigInteger chainId)
         {
-            await AppKit.NetworkController.ChangeActiveChainAsync(ToWcChain(this.Client, chainId));
+            var targetChain = await ToWcChainAsync(this.Client, chainId);
+            await AppKit.NetworkController.ChangeActiveChainAsync(targetChain);
             ThirdwebDebug.Log($"Switched Reown to chain ID {chainId}.");
         }
 
-        internal static Chain ToWcChain(ThirdwebClient client, BigInteger chainId)
+        internal static async Task<Chain> ToWcChainAsync(ThirdwebClient client, BigInteger chainId)
         {
             var wcChain = ChainConstants.Chains.All.FirstOrDefault(c => c.ChainReference == chainId.ToString());
 
@@ -271,7 +272,7 @@ namespace Thirdweb.Unity
                 return wcChain;
             }
 
-            var twChainMeta = Utils.GetChainMetadata(client, chainId).GetAwaiter().GetResult();
+            var twChainMeta = await Utils.GetChainMetadata(client, chainId);
             return new Chain(
                 chainNamespace: ChainConstants.Namespaces.Evm,
                 chainReference: chainId.ToString(),
