@@ -32,7 +32,9 @@ namespace Thirdweb.Unity
             string url,
             string iconUrl,
             string[] includedWalletIds,
-            string[] excludedWalletIds
+            string[] excludedWalletIds,
+            string[] featuredWalletIds,
+            string singleWalletId
         )
         {
             _client = client;
@@ -54,8 +56,9 @@ namespace Thirdweb.Unity
             var appKitConfig = new AppKitConfig
             {
                 projectId = projectId,
-                includedWalletIds = includedWalletIds,
-                excludedWalletIds = excludedWalletIds,
+                includedWalletIds = singleWalletId == null ? includedWalletIds : null,
+                excludedWalletIds = singleWalletId == null ? excludedWalletIds : null,
+                featuredWalletIds = singleWalletId == null ? featuredWalletIds : null,
                 metadata = new Metadata(name: name, description: description, url: url, iconUrl: iconUrl, redirect: new RedirectData() { Native = ThirdwebManager.Instance.MobileRedirectScheme }),
                 enableEmail = false,
                 enableOnramp = false,
@@ -81,7 +84,7 @@ namespace Thirdweb.Unity
             else
             {
                 ThirdwebDebug.Log($"Awaiting Reown connection (timeout {connectionTimeout.TotalSeconds} seconds)...");
-                connected = await WaitForInteractiveConnectionAsync(connectionTimeout);
+                connected = await WaitForInteractiveConnectionAsync(connectionTimeout, singleWalletId);
             }
 
             if (!connected)
@@ -268,7 +271,7 @@ namespace Thirdweb.Unity
             }
         }
 
-        private static async Task<bool> WaitForInteractiveConnectionAsync(TimeSpan timeout)
+        private static async Task<bool> WaitForInteractiveConnectionAsync(TimeSpan timeout, string singleWalletId = null)
         {
             if (AppKit.ConnectorController.IsAccountConnected)
             {
@@ -295,7 +298,14 @@ namespace Thirdweb.Unity
 
                 if (!AppKit.ConnectorController.IsAccountConnected)
                 {
-                    AppKit.OpenModal();
+                    if (singleWalletId != null)
+                    {
+                        await AppKit.ConnectAsync(singleWalletId);
+                    }
+                    else
+                    {
+                        AppKit.OpenModal();
+                    }
                 }
 
                 var timeoutMilliseconds = (int)Math.Max(0, timeout.TotalMilliseconds);

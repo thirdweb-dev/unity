@@ -8,6 +8,21 @@ using UnityEngine.UI;
 
 namespace Thirdweb.Unity.Examples
 {
+    public enum OAuthProvider
+    {
+        Google,
+        Apple,
+        Facebook,
+        Discord,
+        Twitch,
+        Github,
+        Coinbase,
+        X,
+        TikTok,
+        Line,
+        Steam,
+    }
+
     /// <summary>
     /// A simple manager to demonstrate core functionality of the thirdweb SDK.
     /// This is not production-ready code. Do not use this in production.
@@ -20,6 +35,7 @@ namespace Thirdweb.Unity.Examples
         public ulong ChainId;
         public string Email;
         public string Phone;
+        public OAuthProvider Social = OAuthProvider.Google;
         public Transform ActionButtonParent;
         public GameObject ActionButtonPrefab;
         public GameObject LogPanel;
@@ -130,7 +146,8 @@ namespace Thirdweb.Unity.Examples
 
         private async void Wallet_Social()
         {
-            var walletOptions = new WalletOptions(provider: WalletProvider.InAppWallet, chainId: this.ChainId, new InAppWalletOptions(authprovider: AuthProvider.Github));
+            var parsedOAuthProvider = (AuthProvider)System.Enum.Parse(typeof(AuthProvider), this.Social.ToString());
+            var walletOptions = new WalletOptions(provider: WalletProvider.InAppWallet, chainId: this.ChainId, new InAppWalletOptions(authprovider: parsedOAuthProvider));
             var wallet = await ThirdwebManager.Instance.ConnectWallet(walletOptions);
             if (this.AlwaysUpgradeToSmartWallet)
             {
@@ -181,7 +198,39 @@ namespace Thirdweb.Unity.Examples
             var walletOptions = new WalletOptions(
                 provider: WalletProvider.ReownWallet,
                 chainId: this.ChainId,
-                reownOptions: new ReownOptions(projectId: null, name: null, description: null, url: null, iconUrl: null, includedWalletIds: null, excludedWalletIds: null)
+                reownOptions: new ReownOptions(
+                    projectId: null,
+                    name: null,
+                    description: null,
+                    url: null,
+                    iconUrl: null,
+                    includedWalletIds: null,
+                    excludedWalletIds: null,
+                    featuredWalletIds: new string[]
+                    {
+                        "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96",
+                        "18388be9ac2d02726dbac9777c96efaac06d744b2f6d580fccdd4127a6d01fd1",
+                        "541d5dcd4ede02f3afaf75bf8e3e4c4f1fb09edb5fa6c4377ebf31c2785d9adf",
+                    }
+                )
+            );
+            var wallet = await ThirdwebManager.Instance.ConnectWallet(walletOptions);
+            if (this.AlwaysUpgradeToSmartWallet)
+            {
+                wallet = await ThirdwebManager.Instance.UpgradeToSmartWallet(wallet, chainId: this.ChainId, smartWalletOptions: new SmartWalletOptions(sponsorGas: true));
+            }
+            var address = await wallet.GetAddress();
+            this.LogPlayground($"[SIWE] Connected to wallet:\n{address}");
+        }
+
+#pragma warning disable IDE0051 // Remove unused private members: This is a showcase of an alternative way to use Reown
+        private async void Wallet_External_Direct()
+#pragma warning restore IDE0051 // Remove unused private members: This is a showcase of an alternative way to use Reown
+        {
+            var walletOptions = new WalletOptions(
+                provider: WalletProvider.ReownWallet,
+                chainId: this.ChainId,
+                reownOptions: new ReownOptions(singleWalletId: "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96")
             );
             var wallet = await ThirdwebManager.Instance.ConnectWallet(walletOptions);
             if (this.AlwaysUpgradeToSmartWallet)
