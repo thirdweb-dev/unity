@@ -146,7 +146,10 @@ namespace Thirdweb.Unity.Examples
 
         private async void Wallet_Social()
         {
-            var parsedOAuthProvider = (AuthProvider)System.Enum.Parse(typeof(AuthProvider), this.Social.ToString());
+            if (!System.Enum.TryParse<AuthProvider>(this.Social.ToString(), out var parsedOAuthProvider))
+            {
+                parsedOAuthProvider = AuthProvider.Google;
+            }
             var walletOptions = new WalletOptions(provider: WalletProvider.InAppWallet, chainId: this.ChainId, new InAppWalletOptions(authprovider: parsedOAuthProvider));
             var wallet = await ThirdwebManager.Instance.ConnectWallet(walletOptions);
             if (this.AlwaysUpgradeToSmartWallet)
