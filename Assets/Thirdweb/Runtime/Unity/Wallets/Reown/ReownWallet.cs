@@ -34,7 +34,8 @@ namespace Thirdweb.Unity
             string[] includedWalletIds,
             string[] excludedWalletIds,
             string[] featuredWalletIds,
-            string singleWalletId
+            string singleWalletId,
+            bool tryResumeSession
         )
         {
             _client = client;
@@ -75,7 +76,7 @@ namespace Thirdweb.Unity
             ThirdwebDebug.Log("Reown AppKit initialized.");
 
             var connectionTimeout = TimeSpan.FromSeconds(120);
-            var connected = await TryResumeExistingSessionAsync();
+            var connected = tryResumeSession && await TryResumeExistingSessionAsync();
 
             if (connected)
             {

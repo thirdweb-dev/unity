@@ -181,6 +181,9 @@ namespace Thirdweb.Unity
         [JsonProperty("singleWalletId")]
         public string SingleWalletId;
 
+        [JsonProperty("tryResumeSession")]
+        public bool TryResumeSession;
+
         public ReownOptions(
             string projectId = null,
             string name = null,
@@ -190,7 +193,8 @@ namespace Thirdweb.Unity
             string[] includedWalletIds = null,
             string[] excludedWalletIds = null,
             string[] featuredWalletIds = null,
-            string singleWalletId = null
+            string singleWalletId = null,
+            bool tryResumeSession = true
         )
         {
             if (singleWalletId != null && (includedWalletIds != null || excludedWalletIds != null || featuredWalletIds != null))
@@ -206,6 +210,7 @@ namespace Thirdweb.Unity
             this.ExcludedWalletIds = excludedWalletIds;
             this.FeaturedWalletIds = featuredWalletIds;
             this.SingleWalletId = singleWalletId;
+            this.TryResumeSession = tryResumeSession;
         }
     }
 
@@ -445,7 +450,8 @@ namespace Thirdweb.Unity
                         includedWalletIds: walletOptions.ReownOptions.IncludedWalletIds,
                         excludedWalletIds: walletOptions.ReownOptions.ExcludedWalletIds,
                         featuredWalletIds: walletOptions.ReownOptions.FeaturedWalletIds,
-                        singleWalletId: walletOptions.ReownOptions.SingleWalletId
+                        singleWalletId: walletOptions.ReownOptions.SingleWalletId,
+                        tryResumeSession: walletOptions.ReownOptions.TryResumeSession
                     );
                     break;
 #else
